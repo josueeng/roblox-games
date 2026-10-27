@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Proposta de site · Formato Móveis em Madeira</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Manrope:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+@page { size: A4; margin: 0; }
+:root {
+  --bg: #0c1c2a; --surface: #102a3d; --linen: #eef4f2; --muted: #b9cbd0;
+  --pequia: #2f7d3f; --pequia-dark: #0d4e62; --lime: #8cc63f; --teal: #0d4e62; --paper: #f5f8f7; --ink: #0c1c2a; --ink-soft: #364750; --rule: #d3dfe0;
+  --serif: "Fraunces", Georgia, serif; --sans: "Manrope", system-ui, sans-serif; --mono: "DM Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #777; }
+body { font: 500 11pt/1.55 var(--sans); color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.page { width: 210mm; height: 297mm; position: relative; overflow: hidden; background: var(--paper); page-break-after: always; break-after: page; padding: 22mm 20mm 26mm; }
+.page:last-child { page-break-after: auto; break-after: auto; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; }
+h1 em, h2 em, h3 em { font-style: italic; color: var(--pequia); }
+p { margin: 0; }
+.eyebrow { display: flex; align-items: center; gap: 10px; font: 500 9pt/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--pequia-dark); }
+.eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; }
+h2 { font-size: 30pt; line-height: 1.05; margin-top: 10px; }
+.lead { font-size: 11.5pt; color: var(--ink-soft); margin-top: 12px; max-width: 34em; }
+.page:not(.cover)::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px; background: linear-gradient(90deg, #0d4e62, #2f7d3f 60%, #8cc63f); }
+.foot { position: absolute; left: 20mm; right: 20mm; bottom: 12mm; display: flex; justify-content: space-between; border-top: 1px solid var(--rule); padding-top: 8px; font: 500 8pt/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand svg { width: 22px; height: 26px; }
+.brand b { display: block; font: 600 12pt/1 var(--sans); letter-spacing: .32em; }
+.brand small { display: block; font: 500 6.5pt/1 var(--mono); letter-spacing: .28em; margin-top: 5px; opacity: .7; }
+.fill { background: #fff3cf; border-bottom: 1px dashed var(--pequia-dark); padding: 0 4px; }
+
+/* Capa */
+.cover { background: var(--bg); color: var(--linen); padding: 0; }
+.cover .photo { position: absolute; inset: 0 0 auto 0; height: 58%; }
+.cover .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 70%; }
+.cover .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(12,28,42,.6) 0%, rgba(12,28,42,0) 30%, rgba(12,28,42,.15) 55%, var(--bg) 100%); }
+.cover .top { position: absolute; top: 18mm; left: 20mm; right: 20mm; display: flex; justify-content: space-between; align-items: center; z-index: 1; }
+.cover .top .tag { font: 500 8.5pt/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--linen); }
+.cover-net { position: absolute; left: 0; right: 0; bottom: 0; height: 46%; }
+.cover-net .net { opacity: .1; }
+.cover .content { position: absolute; left: 20mm; right: 20mm; bottom: 26mm; }
+.cover, .price, .quote, .closing { --pequia: #8cc63f; }
+.cover .eyebrow { color: var(--lime); }
+.cover h1 { font-size: 46pt; line-height: 1; margin-top: 14px; }
+.cover .sub { margin-top: 18px; font-size: 12pt; color: var(--muted); max-width: 30em; }
+.meta { margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(140,198,63,.35); }
+.meta div { padding-top: 12px; }
+.meta dt { font: 500 8pt/1.4 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.meta dd { margin: 4px 0 0; font-size: 11pt; }
+.cover .fill { background: rgba(214,162,74,.18); color: var(--linen); border-color: var(--pequia); }
+
+/* Aviso */
+.notice { margin-top: 26px; border: 1px solid #9cc9a4; background: #e9f4ec; border-radius: 4px; padding: 18px 20px; display: grid; grid-template-columns: 30px 1fr; gap: 14px; }
+.notice .i { width: 30px; height: 30px; border-radius: 50%; background: var(--pequia); color: #fff; display: grid; place-items: center; font: 600 14pt/1 var(--serif); }
+.notice h3 { font-size: 15pt; }
+.notice p { margin-top: 6px; color: var(--ink-soft); }
+.pages { margin-top: 30px; display: grid; grid-template-columns: 1.35fr 1fr; gap: 18px; align-items: end; }
+.browser { border-radius: 6px; overflow: hidden; background: #0c1c2a; box-shadow: 0 10px 30px rgba(28,25,21,.18); }
+.browser .bar { height: 16px; display: flex; gap: 5px; align-items: center; padding-left: 9px; }
+.browser .bar i { width: 6px; height: 6px; border-radius: 50%; background: #2b4a5c; }
+.browser img { width: 100%; display: block; }
+.phones { display: flex; gap: 10px; justify-content: flex-end; }
+.phone { width: 31%; border-radius: 14px; background: #000; padding: 4px; box-shadow: 0 10px 30px rgba(28,25,21,.2); }
+.phone img { width: 100%; display: block; border-radius: 11px; }
+.caption { font: 500 8.5pt/1.4 var(--mono); color: var(--ink-soft); margin-top: 8px; }
+.list { margin-top: 26px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 26px; }
+.list div { padding: 11px 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 22px 1fr; gap: 8px; }
+.list span { font: italic 400 12pt/1.2 var(--serif); color: var(--pequia); }
+.list b { font-weight: 600; }
+.list p { color: var(--ink-soft); font-size: 10.5pt; }
+
+/* Benefícios */
+.benefits { margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 26px; }
+.benefit { padding: 14px 0 15px; border-top: 1px solid var(--rule); }
+.benefit .n { font: italic 400 20pt/1 var(--serif); color: var(--pequia); }
+.benefit h3 { font-size: 14.5pt; line-height: 1.15; margin-top: 6px; }
+.benefit p { margin-top: 6px; color: var(--ink-soft); font-size: 10.5pt; }
+.quote { margin-top: 18px; background: var(--bg); color: var(--linen); border-radius: 4px; padding: 18px 22px; display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+.quote p { font: 400 14pt/1.3 var(--serif); }
+.quote p em { color: var(--pequia); }
+.quote img { width: 70px; height: 70px; object-fit: cover; border-radius: 50%; }
+
+/* Investimento */
+.price { margin-top: 26px; display: grid; grid-template-columns: 1fr 1.1fr; border-radius: 6px; overflow: hidden; background: var(--bg); color: var(--linen); }
+.price .left { padding: 26px 24px; display: grid; align-content: space-between; gap: 18px; }
+.price .k { font: 500 8.5pt/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--pequia); }
+.price .val { font: 400 58pt/1 var(--serif); letter-spacing: -.02em; }
+.price .val small { font-size: 18pt; margin-right: 4px; color: var(--muted); }
+.price .per { font-size: 11pt; color: var(--muted); }
+.price .month { font: 500 10pt/1.4 var(--mono); color: var(--linen); border-top: 1px solid rgba(140,198,63,.35); padding-top: 12px; }
+.price .right { background: var(--surface); padding: 22px 24px; }
+.price ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 7px; }
+.price li { display: grid; grid-template-columns: 16px 1fr; gap: 8px; font-size: 10.5pt; line-height: 1.4; }
+.price li::before { content: ""; width: 10px; height: 6px; border-left: 1.6px solid var(--pequia); border-bottom: 1.6px solid var(--pequia); transform: rotate(-45deg); margin-top: 4px; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 10.5pt; }
+th, td { text-align: left; padding: 9px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 500 8.5pt/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+td:last-child, th:last-child { text-align: right; white-space: nowrap; padding-left: 12px; }
+td:first-child { padding-right: 12px; }
+.terms { margin-top: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.terms div { border-top: 2px solid var(--teal); padding-top: 8px; }
+.terms b { display: block; font: 500 8.5pt/1.3 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--pequia-dark); }
+.terms p { margin-top: 4px; font-size: 10.5pt; color: var(--ink-soft); }
+
+/* Próximos passos */
+.steps { margin-top: 24px; display: grid; gap: 0; }
+.steps > div { display: grid; grid-template-columns: 46px 1fr; gap: 12px; padding: 14px 0; border-top: 1px solid var(--rule); }
+.steps span { font: italic 400 22pt/1 var(--serif); color: var(--pequia); }
+.steps h3 { font-size: 15pt; }
+.steps p { color: var(--ink-soft); margin-top: 3px; }
+.strip { margin-top: 22px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.strip img { width: 100%; height: 52mm; object-fit: cover; border-radius: 4px; }
+.logo-chip { display: inline-block; background: #fff; border-radius: 8px; padding: 5px 9px; }
+.logo-chip img { display: block; height: 15mm; width: auto; }
+.closing .logo-chip { margin-bottom: 10px; }
+.closing .contact b { font-weight: 600; }
+.closing { position: absolute; left: 20mm; right: 20mm; bottom: 26mm; background: var(--bg); color: var(--linen); border-radius: 6px; padding: 22px 24px; display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: end; }
+.closing h3 { font-size: 22pt; line-height: 1.1; }
+.closing p { color: var(--muted); margin-top: 8px; font-size: 10.5pt; max-width: 30em; }
+.closing .contact { text-align: right; font: 500 9pt/1.7 var(--mono); }
+.net { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--lime); opacity: .12; pointer-events: none; }
+.price .left, .quote { position: relative; overflow: hidden; }
+.closing { overflow: hidden; }
+.price .left > :not(.net), .closing > :not(.net), .quote > :not(.net) { position: relative; }
+.closing .fill { background: rgba(214,162,74,.18); color: var(--linen); border-color: var(--pequia); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute"><symbol id="leaf" viewBox="0 0 30 34"><path fill="#d6a24a" d="M15 1C7 8 3 14 3 20.5 3 27 8.4 32 15 33c6.6-1 12-6 12-12.5C27 14 23 8 15 1Z"/><path fill="none" stroke="#12100e" stroke-width="1.4" stroke-linecap="round" d="M15 6v25.5M15 12.5l-5.6 4.6M15 19l-7 5.6M15 12.5l5.6 4.6M15 19l7 5.6"/></symbol></svg>
+
+<!-- 1. Capa -->
+<section class="page cover">
+  <div class="photo"><img src="mesa-pequia.jpg" alt=""></div>
+  <div class="top">
+    <div class="brand"><svg><use href="#leaf"/></svg><span><b>FORMATO</b><small>MÓVEIS EM MADEIRA</small></span></div>
+    <span class="logo-chip"><img src="mandacodex.png" alt="Mandacodex"></span>
+  </div>
+  <div class="cover-net"><svg class="net" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g stroke="currentColor" stroke-width=".8" fill="none"><line x1="230" y1="44" x2="240" y2="39"/><line x1="230" y1="44" x2="264" y2="17"/><line x1="275" y1="160" x2="280" y2="173"/><line x1="275" y1="160" x2="265" y2="170"/><line x1="164" y1="60" x2="180" y2="86"/><line x1="249" y1="161" x2="273" y2="114"/><line x1="240" y1="39" x2="244" y2="9"/><line x1="119" y1="31" x2="142" y2="18"/><line x1="64" y1="185" x2="93" y2="125"/><line x1="182" y1="134" x2="153" y2="83"/><line x1="280" y1="173" x2="265" y2="170"/><line x1="273" y1="114" x2="265" y2="170"/><line x1="64" y1="185" x2="84" y2="107"/><line x1="275" y1="160" x2="273" y2="114"/><line x1="48" y1="61" x2="84" y2="107"/><line x1="152" y1="36" x2="142" y2="18"/><line x1="249" y1="161" x2="220" y2="171"/><line x1="71" y1="21" x2="119" y2="31"/><line x1="161" y1="55" x2="142" y2="18"/><line x1="161" y1="55" x2="180" y2="86"/><line x1="230" y1="44" x2="244" y2="9"/><line x1="164" y1="60" x2="153" y2="83"/><line x1="119" y1="31" x2="161" y2="55"/><line x1="220" y1="171" x2="182" y2="134"/><line x1="220" y1="171" x2="265" y2="170"/><line x1="119" y1="31" x2="152" y2="36"/><line x1="71" y1="21" x2="48" y2="61"/><line x1="93" y1="125" x2="153" y2="83"/><line x1="14" y1="125" x2="84" y2="107"/><line x1="20" y1="80" x2="48" y2="61"/><line x1="20" y1="80" x2="84" y2="107"/><line x1="64" y1="185" x2="14" y2="125"/><line x1="52" y1="21" x2="48" y2="61"/><line x1="153" y1="83" x2="180" y2="86"/><line x1="275" y1="160" x2="249" y2="161"/><line x1="264" y1="17" x2="244" y2="9"/><line x1="152" y1="36" x2="164" y2="60"/><line x1="161" y1="55" x2="152" y2="36"/><line x1="48" y1="61" x2="14" y2="125"/><line x1="240" y1="39" x2="264" y2="17"/><line x1="161" y1="55" x2="164" y2="60"/><line x1="249" y1="161" x2="280" y2="173"/><line x1="71" y1="21" x2="52" y2="21"/><line x1="161" y1="55" x2="153" y2="83"/><line x1="249" y1="161" x2="265" y2="170"/><line x1="20" y1="80" x2="52" y2="21"/><line x1="93" y1="125" x2="84" y2="107"/><line x1="182" y1="134" x2="180" y2="86"/><line x1="20" y1="80" x2="14" y2="125"/></g><g fill="currentColor"><circle cx="71" cy="21" r="2.5"/><circle cx="119" cy="31" r="3.5"/><circle cx="20" cy="80" r="2.5"/><circle cx="275" cy="160" r="2"/><circle cx="230" cy="44" r="3.5"/><circle cx="161" cy="55" r="2"/><circle cx="52" cy="21" r="2"/><circle cx="64" cy="185" r="2.5"/><circle cx="249" cy="161" r="2"/><circle cx="240" cy="39" r="3.5"/><circle cx="93" cy="125" r="3.5"/><circle cx="220" cy="171" r="2.5"/><circle cx="264" cy="17" r="2.5"/><circle cx="182" cy="134" r="2"/><circle cx="152" cy="36" r="2.5"/><circle cx="142" cy="18" r="2.5"/><circle cx="280" cy="173" r="3.5"/><circle cx="164" cy="60" r="3.5"/><circle cx="273" cy="114" r="2.5"/><circle cx="265" cy="170" r="3.5"/><circle cx="153" cy="83" r="3.5"/><circle cx="180" cy="86" r="2"/><circle cx="48" cy="61" r="2.5"/><circle cx="244" cy="9" r="2"/><circle cx="14" cy="125" r="2"/><circle cx="84" cy="107" r="3.5"/></g></svg></div>
+  <div class="content">
+    <span class="eyebrow">Proposta de desenvolvimento</span>
+    <h1>Um site à altura<br>dos seus <em>móveis.</em></h1>
+    <p class="sub">Uma vitrine on-line para as peças da fábrica, pensada para o celular e para levar o cliente direto ao seu WhatsApp.</p>
+    <dl class="meta">
+      <div><dt>Para</dt><dd>Formato Móveis em Madeira<br>Petrolina, PE</dd></div>
+      <div><dt>Data</dt><dd>Outubro de 2026<br>Válida por 30 dias</dd></div>
+      <div><dt>Apresentada por</dt><dd>Josué Lopes · Mandacodex<br>(87) 99919-6460</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- 2. O que é esta proposta -->
+<section class="page">
+  <span class="eyebrow">Antes de tudo</span>
+  <h2>Esta é uma <em>demonstração</em><br>de design</h2>
+  <div class="notice">
+    <div class="i">i</div>
+    <div>
+      <h3>Sem nenhuma obrigação de contratar</h3>
+      <p>O site mostrado aqui é apenas um design, feito para você ver como a Formato pode aparecer na internet. Não há obrigação de adquirir os serviços. Se não fizer sentido para a loja agora, está tudo bem.</p>
+      <p>As fotos foram tiradas dos stories da própria loja só para ilustrar a ideia, e nada foi publicado.</p>
+    </div>
+  </div>
+  <div class="pages">
+    <div>
+      <div class="browser"><div class="bar"><i></i><i></i><i></i></div><img src="desk-hero.jpg" alt="Página inicial no computador"></div>
+      <p class="caption">Página inicial no computador</p>
+    </div>
+    <div>
+      <div class="phones">
+        <div class="phone"><img src="m-1-inicio.jpg" alt=""></div>
+        <div class="phone"><img src="m-3-colecao.jpg" alt=""></div>
+        <div class="phone"><img src="m-8-foto.jpg" alt=""></div>
+      </div>
+      <p class="caption" style="text-align:right">No celular: início, coleção e foto ampliada</p>
+    </div>
+  </div>
+  <div class="list">
+    <div><span>1</span><p><b>Abertura com a marca.</b> Logo animado e foto da mesa de pequiá em destaque.</p></div>
+    <div><span>2</span><p><b>Destaques.</b> Carrossel com as peças principais da fábrica.</p></div>
+    <div><span>3</span><p><b>Coleção com filtros.</b> Mesas, sofás, aparadores, peças em tora e lavabos.</p></div>
+    <div><span>4</span><p><b>Como fazemos.</b> Conversa, produção na fábrica e entrega.</p></div>
+    <div><span>5</span><p><b>Madeiras.</b> Pequiá, jaqueira e a linha madeira com aço.</p></div>
+    <div><span>6</span><p><b>Visite a loja.</b> Endereço, horário, mapa e WhatsApp.</p></div>
+  </div>
+  <div class="foot"><span>Mandacodex · Proposta para a Formato</span><span>02</span></div>
+</section>
+
+<!-- 3. O que você ganha -->
+<section class="page">
+  <span class="eyebrow">O que a Formato ganha</span>
+  <h2>Mais clientes chegando<br>pelo <em>WhatsApp</em></h2>
+  <div class="benefits">
+    <div class="benefit"><span class="n">01</span><h3>Vitrine aberta 24 horas</h3><p>O cliente vê as peças à noite, no fim de semana ou no feriado, mesmo com a loja fechada.</p></div>
+    <div class="benefit"><span class="n">02</span><h3>Pedidos de orçamento mais diretos</h3><p>Cada peça tem um botão que abre o WhatsApp já com o nome dela na mensagem. O cliente chega sabendo o que quer.</p></div>
+    <div class="benefit"><span class="n">03</span><h3>Catálogo sempre organizado</h3><p>Nos stories, as peças ficam espalhadas em vários destaques. No site, ficam separadas por tipo e fáceis de mostrar.</p></div>
+    <div class="benefit"><span class="n">04</span><h3>Mais confiança para vender</h3><p>Um site próprio passa seriedade, principalmente em móveis de valor alto e para clientes de outras cidades.</p></div>
+    <div class="benefit"><span class="n">05</span><h3>Mais chances de ser achado no Google</h3><p>O site tem nome, endereço e descrição dos móveis, o que ajuda a aparecer em buscas como "móveis rústicos em Petrolina".</p></div>
+    <div class="benefit"><span class="n">06</span><h3>Um link para tudo</h3><p>Dá para colocar na bio do Instagram, no WhatsApp Business, no cartão de visita e nos orçamentos.</p></div>
+    <div class="benefit"><span class="n">07</span><h3>Feito para o celular</h3><p>Quem vê os stories e manda mensagem está no celular. O site foi desenhado primeiro para essa tela.</p></div>
+    <div class="benefit"><span class="n">08</span><h3>Menos tempo explicando</h3><p>Endereço, horário, madeiras e o jeito de trabalhar ficam no site, e o atendimento vai direto ao orçamento.</p></div>
+  </div>
+  <div class="quote"><svg class="net" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g stroke="currentColor" stroke-width=".8" fill="none"><line x1="230" y1="44" x2="240" y2="39"/><line x1="230" y1="44" x2="264" y2="17"/><line x1="275" y1="160" x2="280" y2="173"/><line x1="275" y1="160" x2="265" y2="170"/><line x1="164" y1="60" x2="180" y2="86"/><line x1="249" y1="161" x2="273" y2="114"/><line x1="240" y1="39" x2="244" y2="9"/><line x1="119" y1="31" x2="142" y2="18"/><line x1="64" y1="185" x2="93" y2="125"/><line x1="182" y1="134" x2="153" y2="83"/><line x1="280" y1="173" x2="265" y2="170"/><line x1="273" y1="114" x2="265" y2="170"/><line x1="64" y1="185" x2="84" y2="107"/><line x1="275" y1="160" x2="273" y2="114"/><line x1="48" y1="61" x2="84" y2="107"/><line x1="152" y1="36" x2="142" y2="18"/><line x1="249" y1="161" x2="220" y2="171"/><line x1="71" y1="21" x2="119" y2="31"/><line x1="161" y1="55" x2="142" y2="18"/><line x1="161" y1="55" x2="180" y2="86"/><line x1="230" y1="44" x2="244" y2="9"/><line x1="164" y1="60" x2="153" y2="83"/><line x1="119" y1="31" x2="161" y2="55"/><line x1="220" y1="171" x2="182" y2="134"/><line x1="220" y1="171" x2="265" y2="170"/><line x1="119" y1="31" x2="152" y2="36"/><line x1="71" y1="21" x2="48" y2="61"/><line x1="93" y1="125" x2="153" y2="83"/><line x1="14" y1="125" x2="84" y2="107"/><line x1="20" y1="80" x2="48" y2="61"/><line x1="20" y1="80" x2="84" y2="107"/><line x1="64" y1="185" x2="14" y2="125"/><line x1="52" y1="21" x2="48" y2="61"/><line x1="153" y1="83" x2="180" y2="86"/><line x1="275" y1="160" x2="249" y2="161"/><line x1="264" y1="17" x2="244" y2="9"/><line x1="152" y1="36" x2="164" y2="60"/><line x1="161" y1="55" x2="152" y2="36"/><line x1="48" y1="61" x2="14" y2="125"/><line x1="240" y1="39" x2="264" y2="17"/><line x1="161" y1="55" x2="164" y2="60"/><line x1="249" y1="161" x2="280" y2="173"/><line x1="71" y1="21" x2="52" y2="21"/><line x1="161" y1="55" x2="153" y2="83"/><line x1="249" y1="161" x2="265" y2="170"/><line x1="20" y1="80" x2="52" y2="21"/><line x1="93" y1="125" x2="84" y2="107"/><line x1="182" y1="134" x2="180" y2="86"/><line x1="20" y1="80" x2="14" y2="125"/></g><g fill="currentColor"><circle cx="71" cy="21" r="2.5"/><circle cx="119" cy="31" r="3.5"/><circle cx="20" cy="80" r="2.5"/><circle cx="275" cy="160" r="2"/><circle cx="230" cy="44" r="3.5"/><circle cx="161" cy="55" r="2"/><circle cx="52" cy="21" r="2"/><circle cx="64" cy="185" r="2.5"/><circle cx="249" cy="161" r="2"/><circle cx="240" cy="39" r="3.5"/><circle cx="93" cy="125" r="3.5"/><circle cx="220" cy="171" r="2.5"/><circle cx="264" cy="17" r="2.5"/><circle cx="182" cy="134" r="2"/><circle cx="152" cy="36" r="2.5"/><circle cx="142" cy="18" r="2.5"/><circle cx="280" cy="173" r="3.5"/><circle cx="164" cy="60" r="3.5"/><circle cx="273" cy="114" r="2.5"/><circle cx="265" cy="170" r="3.5"/><circle cx="153" cy="83" r="3.5"/><circle cx="180" cy="86" r="2"/><circle cx="48" cy="61" r="2.5"/><circle cx="244" cy="9" r="2"/><circle cx="14" cy="125" r="2"/><circle cx="84" cy="107" r="3.5"/></g></svg>
+    <p>As peças da Formato já são bonitas.<br>O site só deixa <em>mais gente ver.</em></p>
+    <img src="poltronas.jpg" alt="">
+  </div>
+  <div class="foot"><span>Mandacodex · Proposta para a Formato</span><span>03</span></div>
+</section>
+
+<!-- 4. Investimento -->
+<section class="page">
+  <span class="eyebrow">Investimento</span>
+  <h2>Um valor <em>anual</em>,<br>sem taxa de criação</h2>
+  <p class="lead">Um único pagamento por ano cobre a criação do site e tudo o que é preciso para mantê-lo no ar.</p>
+  <div class="price">
+    <div class="left"><svg class="net" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g stroke="currentColor" stroke-width=".8" fill="none"><line x1="230" y1="44" x2="240" y2="39"/><line x1="230" y1="44" x2="264" y2="17"/><line x1="275" y1="160" x2="280" y2="173"/><line x1="275" y1="160" x2="265" y2="170"/><line x1="164" y1="60" x2="180" y2="86"/><line x1="249" y1="161" x2="273" y2="114"/><line x1="240" y1="39" x2="244" y2="9"/><line x1="119" y1="31" x2="142" y2="18"/><line x1="64" y1="185" x2="93" y2="125"/><line x1="182" y1="134" x2="153" y2="83"/><line x1="280" y1="173" x2="265" y2="170"/><line x1="273" y1="114" x2="265" y2="170"/><line x1="64" y1="185" x2="84" y2="107"/><line x1="275" y1="160" x2="273" y2="114"/><line x1="48" y1="61" x2="84" y2="107"/><line x1="152" y1="36" x2="142" y2="18"/><line x1="249" y1="161" x2="220" y2="171"/><line x1="71" y1="21" x2="119" y2="31"/><line x1="161" y1="55" x2="142" y2="18"/><line x1="161" y1="55" x2="180" y2="86"/><line x1="230" y1="44" x2="244" y2="9"/><line x1="164" y1="60" x2="153" y2="83"/><line x1="119" y1="31" x2="161" y2="55"/><line x1="220" y1="171" x2="182" y2="134"/><line x1="220" y1="171" x2="265" y2="170"/><line x1="119" y1="31" x2="152" y2="36"/><line x1="71" y1="21" x2="48" y2="61"/><line x1="93" y1="125" x2="153" y2="83"/><line x1="14" y1="125" x2="84" y2="107"/><line x1="20" y1="80" x2="48" y2="61"/><line x1="20" y1="80" x2="84" y2="107"/><line x1="64" y1="185" x2="14" y2="125"/><line x1="52" y1="21" x2="48" y2="61"/><line x1="153" y1="83" x2="180" y2="86"/><line x1="275" y1="160" x2="249" y2="161"/><line x1="264" y1="17" x2="244" y2="9"/><line x1="152" y1="36" x2="164" y2="60"/><line x1="161" y1="55" x2="152" y2="36"/><line x1="48" y1="61" x2="14" y2="125"/><line x1="240" y1="39" x2="264" y2="17"/><line x1="161" y1="55" x2="164" y2="60"/><line x1="249" y1="161" x2="280" y2="173"/><line x1="71" y1="21" x2="52" y2="21"/><line x1="161" y1="55" x2="153" y2="83"/><line x1="249" y1="161" x2="265" y2="170"/><line x1="20" y1="80" x2="52" y2="21"/><line x1="93" y1="125" x2="84" y2="107"/><line x1="182" y1="134" x2="180" y2="86"/><line x1="20" y1="80" x2="14" y2="125"/></g><g fill="currentColor"><circle cx="71" cy="21" r="2.5"/><circle cx="119" cy="31" r="3.5"/><circle cx="20" cy="80" r="2.5"/><circle cx="275" cy="160" r="2"/><circle cx="230" cy="44" r="3.5"/><circle cx="161" cy="55" r="2"/><circle cx="52" cy="21" r="2"/><circle cx="64" cy="185" r="2.5"/><circle cx="249" cy="161" r="2"/><circle cx="240" cy="39" r="3.5"/><circle cx="93" cy="125" r="3.5"/><circle cx="220" cy="171" r="2.5"/><circle cx="264" cy="17" r="2.5"/><circle cx="182" cy="134" r="2"/><circle cx="152" cy="36" r="2.5"/><circle cx="142" cy="18" r="2.5"/><circle cx="280" cy="173" r="3.5"/><circle cx="164" cy="60" r="3.5"/><circle cx="273" cy="114" r="2.5"/><circle cx="265" cy="170" r="3.5"/><circle cx="153" cy="83" r="3.5"/><circle cx="180" cy="86" r="2"/><circle cx="48" cy="61" r="2.5"/><circle cx="244" cy="9" r="2"/><circle cx="14" cy="125" r="2"/><circle cx="84" cy="107" r="3.5"/></g></svg>
+      <span class="k">Plano anual</span>
+      <div>
+        <div class="val"><small>R$</small>250</div>
+        <p class="per">por ano</p>
+      </div>
+      <p class="month">Menos de R$ 21 por mês</p>
+    </div>
+    <div class="right">
+      <span class="k">O que está incluído</span>
+      <ul>
+        <li>Criação do site com o design desta proposta</li>
+        <li>Versão para celular e para computador</li>
+        <li>Botões de WhatsApp em todas as peças</li>
+        <li>Hospedagem do site</li>
+        <li>Certificado de segurança (cadeado "https")</li>
+        <li>Registro do domínio .com.br no nome da loja</li>
+        <li>Atualização de fotos, peças e textos</li>
+        <li>Suporte se algo parar de funcionar</li>
+      </ul>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th>Item</th><th>Como funciona</th><th>Valor</th></tr></thead>
+    <tbody>
+      <tr><td>Criação do site</td><td>Ajustes finais de textos, fotos e informações da loja</td><td>Incluída</td></tr>
+      <tr><td>Domínio .com.br</td><td>Endereço do site, registrado no CNPJ ou CPF da loja</td><td>Incluído</td></tr>
+      <tr><td>Hospedagem e segurança</td><td>Site no ar o ano todo, com cadeado de segurança</td><td>Incluídas</td></tr>
+      <tr><td>Atualizações</td><td>Novas peças, troca de fotos e textos, sob pedido pelo WhatsApp</td><td>Incluídas</td></tr>
+      <tr><td><b>Total</b></td><td><b>Pagamento anual</b></td><td><b>R$ 250/ano</b></td></tr>
+    </tbody>
+  </table>
+  <div class="terms">
+    <div><b>Pagamento</b><p>Anual, via Pix, no início de cada período de 12 meses.</p></div>
+    <div><b>Renovação</b><p>Ao fim de cada ano, a loja decide se quer renovar.</p></div>
+    <div><b>Validade</b><p>Esta proposta vale por 30 dias a partir da data da capa.</p></div>
+  </div>
+  <div class="foot"><span>Mandacodex · Proposta para a Formato</span><span>04</span></div>
+</section>
+
+<!-- 5. Próximos passos -->
+<section class="page">
+  <span class="eyebrow">Próximos passos</span>
+  <h2>Se quiser seguir,<br>é <em>simples</em></h2>
+  <div class="steps">
+    <div><span>01</span><div><h3>Conversa sobre o design</h3><p>Você diz o que gostou e o que quer mudar: cores, textos, fotos ou a ordem das seções.</p></div></div>
+    <div><span>02</span><div><h3>Conferência das informações</h3><p>Horário de todos os dias, número do WhatsApp e endereço exatos.</p></div></div>
+    <div><span>03</span><div><h3>Escolha das fotos</h3><p>Seleção das peças que vão aparecer, de preferência com fotos na melhor qualidade possível.</p></div></div>
+    <div><span>04</span><div><h3>Site no ar</h3><p>Registro do domínio, publicação e entrega do link para usar no Instagram e no WhatsApp.</p></div></div>
+  </div>
+  <div class="strip"><img src="aparador.jpg" alt=""><img src="lavabo.jpg" alt=""><img src="mesinha-lateral.jpg" alt=""></div>
+  <div class="closing"><svg class="net" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g stroke="currentColor" stroke-width=".8" fill="none"><line x1="230" y1="44" x2="240" y2="39"/><line x1="230" y1="44" x2="264" y2="17"/><line x1="275" y1="160" x2="280" y2="173"/><line x1="275" y1="160" x2="265" y2="170"/><line x1="164" y1="60" x2="180" y2="86"/><line x1="249" y1="161" x2="273" y2="114"/><line x1="240" y1="39" x2="244" y2="9"/><line x1="119" y1="31" x2="142" y2="18"/><line x1="64" y1="185" x2="93" y2="125"/><line x1="182" y1="134" x2="153" y2="83"/><line x1="280" y1="173" x2="265" y2="170"/><line x1="273" y1="114" x2="265" y2="170"/><line x1="64" y1="185" x2="84" y2="107"/><line x1="275" y1="160" x2="273" y2="114"/><line x1="48" y1="61" x2="84" y2="107"/><line x1="152" y1="36" x2="142" y2="18"/><line x1="249" y1="161" x2="220" y2="171"/><line x1="71" y1="21" x2="119" y2="31"/><line x1="161" y1="55" x2="142" y2="18"/><line x1="161" y1="55" x2="180" y2="86"/><line x1="230" y1="44" x2="244" y2="9"/><line x1="164" y1="60" x2="153" y2="83"/><line x1="119" y1="31" x2="161" y2="55"/><line x1="220" y1="171" x2="182" y2="134"/><line x1="220" y1="171" x2="265" y2="170"/><line x1="119" y1="31" x2="152" y2="36"/><line x1="71" y1="21" x2="48" y2="61"/><line x1="93" y1="125" x2="153" y2="83"/><line x1="14" y1="125" x2="84" y2="107"/><line x1="20" y1="80" x2="48" y2="61"/><line x1="20" y1="80" x2="84" y2="107"/><line x1="64" y1="185" x2="14" y2="125"/><line x1="52" y1="21" x2="48" y2="61"/><line x1="153" y1="83" x2="180" y2="86"/><line x1="275" y1="160" x2="249" y2="161"/><line x1="264" y1="17" x2="244" y2="9"/><line x1="152" y1="36" x2="164" y2="60"/><line x1="161" y1="55" x2="152" y2="36"/><line x1="48" y1="61" x2="14" y2="125"/><line x1="240" y1="39" x2="264" y2="17"/><line x1="161" y1="55" x2="164" y2="60"/><line x1="249" y1="161" x2="280" y2="173"/><line x1="71" y1="21" x2="52" y2="21"/><line x1="161" y1="55" x2="153" y2="83"/><line x1="249" y1="161" x2="265" y2="170"/><line x1="20" y1="80" x2="52" y2="21"/><line x1="93" y1="125" x2="84" y2="107"/><line x1="182" y1="134" x2="180" y2="86"/><line x1="20" y1="80" x2="14" y2="125"/></g><g fill="currentColor"><circle cx="71" cy="21" r="2.5"/><circle cx="119" cy="31" r="3.5"/><circle cx="20" cy="80" r="2.5"/><circle cx="275" cy="160" r="2"/><circle cx="230" cy="44" r="3.5"/><circle cx="161" cy="55" r="2"/><circle cx="52" cy="21" r="2"/><circle cx="64" cy="185" r="2.5"/><circle cx="249" cy="161" r="2"/><circle cx="240" cy="39" r="3.5"/><circle cx="93" cy="125" r="3.5"/><circle cx="220" cy="171" r="2.5"/><circle cx="264" cy="17" r="2.5"/><circle cx="182" cy="134" r="2"/><circle cx="152" cy="36" r="2.5"/><circle cx="142" cy="18" r="2.5"/><circle cx="280" cy="173" r="3.5"/><circle cx="164" cy="60" r="3.5"/><circle cx="273" cy="114" r="2.5"/><circle cx="265" cy="170" r="3.5"/><circle cx="153" cy="83" r="3.5"/><circle cx="180" cy="86" r="2"/><circle cx="48" cy="61" r="2.5"/><circle cx="244" cy="9" r="2"/><circle cx="14" cy="125" r="2"/><circle cx="84" cy="107" r="3.5"/></g></svg>
+    <div>
+      <h3>Obrigado pela atenção.</h3>
+      <p>Lembrando: este material é só uma demonstração de design, sem nenhuma obrigação de contratar. Fico à disposição para tirar dúvidas.</p>
+    </div>
+    <div class="contact"><span class="logo-chip"><img src="mandacodex.png" alt="Mandacodex"></span><b>Josué Lopes</b><br>Mandacodex<br>WhatsApp (87) 99919-6460</div>
+  </div>
+  <div class="foot"><span>Mandacodex · Proposta para a Formato</span><span>05</span></div>
+</section>
+
+</body>
+</html>
