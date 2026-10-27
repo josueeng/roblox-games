@@ -1,0 +1,1546 @@
+<roblox version="4">
+<Item class="ReplicatedStorage" referent="RBX00000003"><Properties><string name="Name">ReplicatedStorage</string></Properties><Item class="Folder" referent="RBX00000002"><Properties><string name="Name">Shared</string></Properties><Item class="ModuleScript" referent="RBX00000001"><Properties><string name="Name">Config</string><ProtectedString name="Source"><![CDATA[--[[
+	Configurações do jogo "Fuja do Tsunami".
+	Compartilhado entre servidor e cliente (ReplicatedStorage.Shared.Config).
+
+	O mapa é uma faixa ao longo do eixo X:
+	  X < 0               -> Base (zona segura, onde os itens são depositados)
+	  0 .. MAP_LENGTH     -> Zonas de coleta (quanto mais longe, mais valiosos os itens)
+	  X > MAP_LENGTH      -> Mar (de onde vêm os desastres)
+]]
+
+local Config = {}
+
+-- Mapa ------------------------------------------------------------------------
+Config.MAP_LENGTH = 900
+Config.MAP_WIDTH = 120
+Config.BASE_LENGTH = 70
+Config.GATE_WIDTH = 36
+
+-- Abrigos: posições X das fileiras e Z de cada abrigo na fileira
+Config.SHELTER_X = { 170, 330, 490, 640, 790 }
+Config.SHELTER_Z = { -28, 28 }
+Config.SHELTER_SIZE = 18
+Config.SHELTER_HEIGHT = 12
+
+-- Ciclo dos desastres (segundos) ---------------------------------------------
+Config.INTERMISSION = 25
+Config.WARNING_TIME = 7
+Config.RESPAWN_TIME = 3
+
+-- Recompensa por sobreviver a uma onda
+Config.SURVIVE_BONUS = 15
+
+-- Desastres -------------------------------------------------------------------
+Config.DISASTERS = {
+	{
+		name = "Tsunami",
+		speed = 45,
+		height = 50,
+		color = Color3.fromRGB(30, 120, 210),
+		foamColor = Color3.fromRGB(235, 250, 255),
+		material = Enum.Material.SmoothPlastic,
+		transparency = 0.2,
+		weight = 5,
+	},
+	{
+		name = "Mega Tsunami",
+		speed = 68,
+		height = 80,
+		color = Color3.fromRGB(15, 70, 160),
+		foamColor = Color3.fromRGB(200, 230, 255),
+		material = Enum.Material.SmoothPlastic,
+		transparency = 0.15,
+		weight = 2,
+	},
+	{
+		name = "Onda de Lava",
+		speed = 32,
+		height = 40,
+		color = Color3.fromRGB(255, 90, 20),
+		foamColor = Color3.fromRGB(255, 220, 60),
+		material = Enum.Material.Neon,
+		transparency = 0.05,
+		weight = 2,
+	},
+	{
+		name = "Avalanche de Lama",
+		speed = 38,
+		height = 45,
+		color = Color3.fromRGB(110, 75, 45),
+		foamColor = Color3.fromRGB(160, 120, 80),
+		material = Enum.Material.Mud,
+		transparency = 0,
+		weight = 2,
+	},
+}
+
+-- Zonas e itens ---------------------------------------------------------------
+-- weight = chance relativa de aparecer dentro da zona
+Config.ZONES = {
+	{
+		name = "Praia",
+		rarity = "Comum",
+		startX = 0,
+		endX = 240,
+		color = Color3.fromRGB(120, 220, 120),
+		groundColor = Color3.fromRGB(235, 215, 160),
+		material = Enum.Material.Sand,
+		maxItems = 30,
+		items = {
+			{ name = "Concha", value = 5, weight = 60, color = Color3.fromRGB(255, 200, 200), shape = Enum.PartType.Ball },
+			{ name = "Estrela-do-mar", value = 8, weight = 30, color = Color3.fromRGB(255, 140, 60), shape = Enum.PartType.Block },
+			{ name = "Garrafa com Mensagem", value = 15, weight = 10, color = Color3.fromRGB(120, 200, 140), shape = Enum.PartType.Cylinder },
+		},
+	},
+	{
+		name = "Dunas",
+		rarity = "Raro",
+		startX = 240,
+		endX = 470,
+		color = Color3.fromRGB(80, 160, 255),
+		groundColor = Color3.fromRGB(210, 170, 110),
+		material = Enum.Material.Sand,
+		maxItems = 24,
+		items = {
+			{ name = "Âmbar", value = 20, weight = 55, color = Color3.fromRGB(255, 170, 30), shape = Enum.PartType.Ball },
+			{ name = "Fóssil", value = 30, weight = 30, color = Color3.fromRGB(230, 225, 210), shape = Enum.PartType.Block },
+			{ name = "Bússola Antiga", value = 45, weight = 15, color = Color3.fromRGB(190, 140, 70), shape = Enum.PartType.Cylinder },
+		},
+	},
+	{
+		name = "Rochedo",
+		rarity = "Épico",
+		startX = 470,
+		endX = 700,
+		color = Color3.fromRGB(190, 100, 255),
+		groundColor = Color3.fromRGB(120, 115, 110),
+		material = Enum.Material.Rock,
+		maxItems = 18,
+		items = {
+			{ name = "Cristal", value = 60, weight = 55, color = Color3.fromRGB(170, 120, 255), shape = Enum.PartType.Block },
+			{ name = "Pepita de Ouro", value = 90, weight = 30, color = Color3.fromRGB(255, 215, 0), shape = Enum.PartType.Ball },
+			{ name = "Coroa Pirata", value = 150, weight = 15, color = Color3.fromRGB(255, 190, 40), shape = Enum.PartType.Cylinder },
+		},
+	},
+	{
+		name = "Recife",
+		rarity = "Lendário",
+		startX = 700,
+		endX = 900,
+		color = Color3.fromRGB(255, 200, 40),
+		groundColor = Color3.fromRGB(240, 140, 150),
+		material = Enum.Material.Slate,
+		maxItems = 12,
+		items = {
+			{ name = "Pérola Negra", value = 200, weight = 55, color = Color3.fromRGB(40, 40, 50), shape = Enum.PartType.Ball },
+			{ name = "Tridente", value = 350, weight = 30, color = Color3.fromRGB(80, 230, 230), shape = Enum.PartType.Cylinder },
+			{ name = "Coração do Oceano", value = 600, weight = 15, color = Color3.fromRGB(30, 90, 255), shape = Enum.PartType.Ball },
+		},
+	},
+}
+
+Config.ITEM_RESPAWN_INTERVAL = 2
+
+-- Melhorias -------------------------------------------------------------------
+Config.UPGRADE_ORDER = { "Speed", "Capacity" }
+Config.UPGRADES = {
+	Speed = {
+		name = "Velocidade",
+		description = "Corra mais rápido que a onda!",
+		dataKey = "SpeedLevel",
+		base = 16,
+		perLevel = 3,
+		maxLevel = 10,
+		baseCost = 50,
+		costMultiplier = 1.6,
+	},
+	Capacity = {
+		name = "Mochila",
+		description = "Carregue mais itens por viagem.",
+		dataKey = "CapacityLevel",
+		base = 3,
+		perLevel = 1,
+		maxLevel = 12,
+		baseCost = 40,
+		costMultiplier = 1.5,
+	},
+}
+
+function Config.getUpgradeValue(key, level)
+	local upgrade = Config.UPGRADES[key]
+	return upgrade.base + upgrade.perLevel * level
+end
+
+function Config.getUpgradeCost(key, level)
+	local upgrade = Config.UPGRADES[key]
+	return math.floor(upgrade.baseCost * upgrade.costMultiplier ^ level)
+end
+
+function Config.getZoneAt(x)
+	for _, zone in ipairs(Config.ZONES) do
+		if x >= zone.startX and x < zone.endX then
+			return zone
+		end
+	end
+	return nil
+end
+
+return Config
+]]></ProtectedString></Properties></Item>
+</Item>
+</Item>
+<Item class="ServerScriptService" referent="RBX00000011"><Properties><string name="Name">ServerScriptService</string></Properties><Item class="Folder" referent="RBX00000010"><Properties><string name="Name">Server</string></Properties><Item class="ModuleScript" referent="RBX00000004"><Properties><string name="Name">DisasterManager</string><ProtectedString name="Source"><![CDATA[-- Cria e move a onda do desastre do mar até a muralha da base.
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
+local Util = require(script.Parent.Util)
+
+local DisasterManager = {}
+
+local THICKNESS = 30
+local WIDTH = Config.MAP_WIDTH + 30
+
+function DisasterManager.pick()
+	return Util.pickWeighted(Config.DISASTERS)
+end
+
+-- isSafe(position) -> boolean; onHit(player) é chamado para quem for atingido.
+-- Retorna quando a onda chega à base.
+function DisasterManager.runWave(disaster, isSafe, onHit)
+	local model = Instance.new("Model")
+	model.Name = "Onda"
+
+	local wave = Util.part({
+		Name = "Corpo",
+		Size = Vector3.new(THICKNESS, disaster.height, WIDTH),
+		Material = disaster.material,
+		Color = disaster.color,
+		Transparency = disaster.transparency,
+		CanCollide = false,
+		CanTouch = false,
+		CanQuery = false,
+		CastShadow = false,
+		Parent = model,
+	})
+	local foam = Util.part({
+		Name = "Espuma",
+		Size = Vector3.new(THICKNESS + 4, 4, WIDTH),
+		Material = Enum.Material.Neon,
+		Color = disaster.foamColor,
+		Transparency = 0.1,
+		CanCollide = false,
+		CanTouch = false,
+		CanQuery = false,
+		CastShadow = false,
+		Parent = model,
+	})
+	model.PrimaryPart = wave
+	model:SetAttribute("Height", disaster.height)
+	model.Parent = workspace
+
+	local front = Config.MAP_LENGTH + 40
+	local function place()
+		wave.Position = Vector3.new(front + THICKNESS / 2, disaster.height / 2, 0)
+		foam.Position = Vector3.new(front + THICKNESS / 2 - 2, disaster.height + 1, 0)
+	end
+	place()
+
+	while front > 0 do
+		local dt = RunService.Heartbeat:Wait()
+		local previousFront = front
+		front = math.max(front - disaster.speed * dt, 0)
+		place()
+
+		-- Atinge quem estiver entre a frente atual e a traseira da onda
+		for _, player in ipairs(Players:GetPlayers()) do
+			local character = player.Character
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+			if root and humanoid and humanoid.Health > 0 then
+				local position = root.Position
+				local inWave = position.X >= front and position.X <= previousFront + THICKNESS
+				if inWave and position.Y < disaster.height + 4 and not isSafe(position) then
+					onHit(player)
+				end
+			end
+		end
+	end
+
+	-- A onda bate na muralha e se desfaz
+	for i = 1, 20 do
+		wave.Transparency = disaster.transparency + (1 - disaster.transparency) * i / 20
+		foam.Transparency = 0.1 + 0.9 * i / 20
+		task.wait(0.05)
+	end
+	model:Destroy()
+end
+
+return DisasterManager
+]]></ProtectedString></Properties></Item>
+<Item class="ModuleScript" referent="RBX00000005"><Properties><string name="Name">ItemSpawner</string><ProtectedString name="Source"><![CDATA[-- Gera itens colecionáveis nas zonas e chama onPickup quando um jogador encosta neles.
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
+local Util = require(script.Parent.Util)
+
+local ItemSpawner = {}
+
+local itemsFolder
+local shelters = {}
+local onPickup
+local countByZone = {}
+
+local function isNearShelter(position)
+	for _, shelter in ipairs(shelters) do
+		local offset = position - shelter.position
+		if math.abs(offset.X) < shelter.halfSize.X + 3 and math.abs(offset.Z) < shelter.halfSize.Z + 3 then
+			return true
+		end
+	end
+	return false
+end
+
+local function randomPosition(zone)
+	local margin = 8
+	for _ = 1, 20 do
+		local x = zone.startX + margin + math.random() * (zone.endX - zone.startX - margin * 2)
+		local z = (math.random() - 0.5) * (Config.MAP_WIDTH - margin * 2)
+		local position = Vector3.new(x, 2.5, z)
+		if not isNearShelter(position) then
+			return position
+		end
+	end
+	return nil
+end
+
+local function spawnItem(zone)
+	local position = randomPosition(zone)
+	if not position then
+		return
+	end
+
+	local definition = Util.pickWeighted(zone.items)
+
+	local part = Instance.new("Part")
+	part.Name = definition.name
+	part.Shape = definition.shape
+	part.Size = Vector3.new(2.5, 2.5, 2.5)
+	part.Anchored = true
+	part.CanCollide = false
+	part.Material = Enum.Material.Neon
+	part.Color = definition.color
+	part.Position = position
+	part:SetAttribute("Value", definition.value)
+	part:SetAttribute("Zone", zone.name)
+
+	local light = Instance.new("PointLight")
+	light.Color = zone.color
+	light.Range = 8
+	light.Brightness = 1.5
+	light.Parent = part
+
+	Util.billboard(part, string.format("%s\n💰 %d", definition.name, definition.value), zone.color, 3, 80, UDim2.fromOffset(160, 50))
+
+	countByZone[zone.name] += 1
+	part.Destroying:Connect(function()
+		countByZone[zone.name] -= 1
+	end)
+
+	part.Touched:Connect(function(hit)
+		if not part.Parent then
+			return
+		end
+		local character = hit:FindFirstAncestorOfClass("Model")
+		local player = character and Players:GetPlayerFromCharacter(character)
+		if player and onPickup(player, part) then
+			part:Destroy()
+		end
+	end)
+
+	part.Parent = itemsFolder
+end
+
+function ItemSpawner.init(shelterList, pickupCallback)
+	shelters = shelterList
+	onPickup = pickupCallback
+
+	itemsFolder = Instance.new("Folder")
+	itemsFolder.Name = "Itens"
+	itemsFolder.Parent = workspace
+
+	for _, zone in ipairs(Config.ZONES) do
+		countByZone[zone.name] = 0
+		for _ = 1, zone.maxItems do
+			spawnItem(zone)
+		end
+	end
+
+	task.spawn(function()
+		while true do
+			task.wait(Config.ITEM_RESPAWN_INTERVAL)
+			for _, zone in ipairs(Config.ZONES) do
+				if countByZone[zone.name] < zone.maxItems then
+					spawnItem(zone)
+				end
+			end
+		end
+	end)
+end
+
+return ItemSpawner
+]]></ProtectedString></Properties></Item>
+<Item class="Script" referent="RBX00000006"><Properties><string name="Name">Main</string><ProtectedString name="Source"><![CDATA[--[[
+	Fuja do Tsunami — script principal do servidor.
+
+	Loop do jogo:
+	  1. Calmo:  jogadores correm pelas zonas coletando itens.
+	  2. Alerta: aviso de que um desastre está chegando.
+	  3. Onda:   a onda varre o mapa do mar até a base. Quem não estiver
+	             na base ou em um abrigo é atingido e perde os itens carregados.
+	Itens só viram moedas quando o jogador volta para a base.
+	Moedas compram melhorias de velocidade e de mochila.
+]]
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
+local MapBuilder = require(script.Parent.MapBuilder)
+local ItemSpawner = require(script.Parent.ItemSpawner)
+local DisasterManager = require(script.Parent.DisasterManager)
+local PlayerData = require(script.Parent.PlayerData)
+
+Players.RespawnTime = Config.RESPAWN_TIME
+
+-- Remotes ---------------------------------------------------------------------
+local remotes = Instance.new("Folder")
+remotes.Name = "Remotes"
+
+local buyUpgrade = Instance.new("RemoteFunction")
+buyUpgrade.Name = "BuyUpgrade"
+buyUpgrade.Parent = remotes
+
+local notify = Instance.new("RemoteEvent")
+notify.Name = "Notify"
+notify.Parent = remotes
+
+local openShop = Instance.new("RemoteEvent")
+openShop.Name = "OpenShop"
+openShop.Parent = remotes
+
+remotes.Parent = ReplicatedStorage
+
+local function send(player, text, color)
+	notify:FireClient(player, text, color or Color3.new(1, 1, 1))
+end
+
+local function sendAll(text, color)
+	notify:FireAllClients(text, color or Color3.new(1, 1, 1))
+end
+
+local function setState(phase, timeLeft, disasterName)
+	ReplicatedStorage:SetAttribute("Phase", phase)
+	ReplicatedStorage:SetAttribute("TimeLeft", timeLeft)
+	ReplicatedStorage:SetAttribute("Disaster", disasterName or "")
+end
+
+-- Mapa ------------------------------------------------------------------------
+local map = MapBuilder.build()
+
+local function isInBase(position)
+	return position.X < 0
+end
+
+local function isInShelter(position)
+	for _, shelter in ipairs(map.shelters) do
+		local offset = position - shelter.position
+		if
+			math.abs(offset.X) <= shelter.halfSize.X
+			and math.abs(offset.Z) <= shelter.halfSize.Z
+			and position.Y <= shelter.position.Y + shelter.halfSize.Y
+		then
+			return true
+		end
+	end
+	return false
+end
+
+local function isSafe(position)
+	return isInBase(position) or isInShelter(position)
+end
+
+map.shopPrompt.Triggered:Connect(function(player)
+	openShop:FireClient(player)
+end)
+
+-- Mochila (itens carregados, perdidos ao morrer) ------------------------------
+local function setCarried(player, count, value)
+	player:SetAttribute("Carried", count)
+	player:SetAttribute("CarriedValue", value)
+end
+
+local function maxCarry(player)
+	return Config.getUpgradeValue("Capacity", PlayerData.get(player, "CapacityLevel") or 0)
+end
+
+local function applyUpgrades(player)
+	player:SetAttribute("MaxCarry", maxCarry(player))
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.WalkSpeed = Config.getUpgradeValue("Speed", PlayerData.get(player, "SpeedLevel") or 0)
+	end
+end
+
+local fullWarningAt = {}
+
+local function onPickup(player, item)
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not humanoid or humanoid.Health <= 0 then
+		return false
+	end
+
+	local carried = player:GetAttribute("Carried") or 0
+	if carried >= maxCarry(player) then
+		if os.clock() - (fullWarningAt[player] or 0) > 2 then
+			fullWarningAt[player] = os.clock()
+			send(player, "🎒 Mochila cheia! Volte para a base para depositar.", Color3.fromRGB(255, 180, 80))
+		end
+		return false
+	end
+
+	local value = item:GetAttribute("Value") or 0
+	setCarried(player, carried + 1, (player:GetAttribute("CarriedValue") or 0) + value)
+	send(player, string.format("+ %s (💰 %d)", item.Name, value), Color3.fromRGB(150, 255, 150))
+	return true
+end
+
+ItemSpawner.init(map.shelters, onPickup)
+
+-- Jogadores -------------------------------------------------------------------
+local diedThisWave = {}
+
+local function onCharacterAdded(player, character)
+	setCarried(player, 0, 0)
+	local humanoid = character:WaitForChild("Humanoid")
+	applyUpgrades(player)
+
+	humanoid.Died:Connect(function()
+		diedThisWave[player] = true
+		local lost = player:GetAttribute("Carried") or 0
+		if lost > 0 then
+			send(player, string.format("💀 Você perdeu %d itens!", lost), Color3.fromRGB(255, 90, 90))
+		end
+		setCarried(player, 0, 0)
+	end)
+end
+
+local function onPlayerAdded(player)
+	PlayerData.load(player)
+	setCarried(player, 0, 0)
+	player:SetAttribute("MaxCarry", maxCarry(player))
+
+	player.CharacterAdded:Connect(function(character)
+		onCharacterAdded(player, character)
+	end)
+	if player.Character then
+		task.spawn(onCharacterAdded, player, player.Character)
+	end
+end
+
+Players.PlayerAdded:Connect(onPlayerAdded)
+for _, player in ipairs(Players:GetPlayers()) do
+	task.spawn(onPlayerAdded, player)
+end
+
+Players.PlayerRemoving:Connect(function(player)
+	PlayerData.release(player)
+	fullWarningAt[player] = nil
+	diedThisWave[player] = nil
+end)
+
+game:BindToClose(function()
+	for _, player in ipairs(Players:GetPlayers()) do
+		PlayerData.save(player)
+	end
+end)
+
+task.spawn(function()
+	while true do
+		task.wait(60)
+		for _, player in ipairs(Players:GetPlayers()) do
+			PlayerData.save(player)
+		end
+	end
+end)
+
+-- Depósito automático ao entrar na base --------------------------------------
+task.spawn(function()
+	while true do
+		task.wait(0.25)
+		for _, player in ipairs(Players:GetPlayers()) do
+			local value = player:GetAttribute("CarriedValue") or 0
+			local character = player.Character
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			if value > 0 and root and isInBase(root.Position) and PlayerData.get(player, "Coins") then
+				PlayerData.increment(player, "Coins", value)
+				send(player, string.format("💰 +%d moedas depositadas!", value), Color3.fromRGB(255, 220, 60))
+				setCarried(player, 0, 0)
+			end
+		end
+	end
+end)
+
+-- Loja ------------------------------------------------------------------------
+buyUpgrade.OnServerInvoke = function(player, key)
+	local upgrade = type(key) == "string" and Config.UPGRADES[key]
+	if not upgrade then
+		return false, "Melhoria inválida."
+	end
+
+	local level = PlayerData.get(player, upgrade.dataKey)
+	local coins = PlayerData.get(player, "Coins")
+	if not (level and coins) then
+		return false, "Dados ainda carregando."
+	end
+	if level >= upgrade.maxLevel then
+		return false, "Nível máximo!"
+	end
+
+	local cost = Config.getUpgradeCost(key, level)
+	if coins < cost then
+		return false, string.format("Faltam %d moedas.", cost - coins)
+	end
+
+	PlayerData.increment(player, "Coins", -cost)
+	PlayerData.set(player, upgrade.dataKey, level + 1)
+	applyUpgrades(player)
+	return true, string.format("%s nível %d!", upgrade.name, level + 1)
+end
+
+-- Loop principal --------------------------------------------------------------
+local function onWaveHit(player)
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid and humanoid.Health > 0 then
+		humanoid.Health = 0
+	end
+end
+
+while true do
+	for t = Config.INTERMISSION, 1, -1 do
+		setState("Calmo", t)
+		task.wait(1)
+	end
+
+	local disaster = DisasterManager.pick()
+	sendAll(string.format("⚠ %s chegando! Corra para um ABRIGO ou para a BASE!", disaster.name), Color3.fromRGB(255, 80, 80))
+	for t = Config.WARNING_TIME, 1, -1 do
+		setState("Alerta", t, disaster.name)
+		task.wait(1)
+	end
+
+	table.clear(diedThisWave)
+	local participants = Players:GetPlayers()
+
+	setState("Onda", 0, disaster.name)
+	DisasterManager.runWave(disaster, isSafe, onWaveHit)
+
+	for _, player in ipairs(participants) do
+		local character = player.Parent and player.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		if humanoid and humanoid.Health > 0 and not diedThisWave[player] and PlayerData.get(player, "Coins") then
+			PlayerData.increment(player, "Waves", 1)
+			PlayerData.increment(player, "Coins", Config.SURVIVE_BONUS)
+			send(player, string.format("🏆 Você sobreviveu ao %s! +%d moedas", disaster.name, Config.SURVIVE_BONUS), Color3.fromRGB(120, 220, 255))
+		end
+	end
+end
+]]></ProtectedString></Properties></Item>
+<Item class="ModuleScript" referent="RBX00000007"><Properties><string name="Name">MapBuilder</string><ProtectedString name="Source"><![CDATA[-- Constrói o mapa inteiro por código: base, zonas de coleta, abrigos, penhascos e mar.
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Lighting = game:GetService("Lighting")
+
+local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
+local Util = require(script.Parent.Util)
+
+local MapBuilder = {}
+
+local W = Config.MAP_WIDTH
+local L = Config.MAP_LENGTH
+local B = Config.BASE_LENGTH
+
+local function buildShelter(parent, x, z)
+	local size = Config.SHELTER_SIZE
+	local height = Config.SHELTER_HEIGHT
+	local wallColor = Color3.fromRGB(150, 150, 160)
+
+	local model = Instance.new("Model")
+	model.Name = "Abrigo"
+	model.Parent = parent
+
+	-- Parede voltada para o mar (leste)
+	Util.part({
+		Name = "ParedeMar",
+		Size = Vector3.new(2, height, size),
+		Position = Vector3.new(x + size / 2 - 1, height / 2, z),
+		Material = Enum.Material.Concrete,
+		Color = wallColor,
+		Parent = model,
+	})
+	-- Paredes laterais
+	for _, side in ipairs({ -1, 1 }) do
+		Util.part({
+			Name = "ParedeLateral",
+			Size = Vector3.new(size, height, 2),
+			Position = Vector3.new(x, height / 2, z + side * (size / 2 - 1)),
+			Material = Enum.Material.Concrete,
+			Color = wallColor,
+			Parent = model,
+		})
+	end
+	-- Teto
+	Util.part({
+		Name = "Teto",
+		Size = Vector3.new(size + 2, 2, size + 2),
+		Position = Vector3.new(x, height + 1, z),
+		Material = Enum.Material.DiamondPlate,
+		Color = Color3.fromRGB(90, 90, 100),
+		Parent = model,
+	})
+	-- Piso verde indicando área segura (entrada voltada para a base, lado oeste)
+	Util.part({
+		Name = "PisoSeguro",
+		Size = Vector3.new(size - 2, 0.2, size - 4),
+		Position = Vector3.new(x - 1, 0.1, z),
+		Material = Enum.Material.Neon,
+		Color = Color3.fromRGB(60, 255, 120),
+		Transparency = 0.5,
+		CanCollide = false,
+		Parent = model,
+	})
+	-- Farol para achar o abrigo de longe
+	local beacon = Util.part({
+		Name = "Farol",
+		Size = Vector3.new(2, 24, 2),
+		Position = Vector3.new(x, height + 14, z),
+		Material = Enum.Material.Neon,
+		Color = Color3.fromRGB(60, 255, 120),
+		CanCollide = false,
+		Parent = model,
+	})
+	Util.billboard(beacon, "🛡 ABRIGO", Color3.fromRGB(120, 255, 160), 14, 600, UDim2.fromOffset(160, 40))
+
+	return {
+		position = Vector3.new(x, height / 2, z),
+		halfSize = Vector3.new(size / 2, height / 2, size / 2),
+	}
+end
+
+local function buildBase(parent)
+	Util.part({
+		Name = "ChaoBase",
+		Size = Vector3.new(B, 2, W),
+		Position = Vector3.new(-B / 2, -1, 0),
+		Material = Enum.Material.Concrete,
+		Color = Color3.fromRGB(110, 170, 110),
+		Parent = parent,
+	})
+
+	-- Muralha com portão: a onda para aqui
+	local segment = (W - Config.GATE_WIDTH) / 2
+	for _, side in ipairs({ -1, 1 }) do
+		Util.part({
+			Name = "Muralha",
+			Size = Vector3.new(4, 30, segment),
+			Position = Vector3.new(-2, 15, side * (Config.GATE_WIDTH / 2 + segment / 2)),
+			Material = Enum.Material.Brick,
+			Color = Color3.fromRGB(150, 110, 90),
+			Parent = parent,
+		})
+	end
+	local arch = Util.part({
+		Name = "Arco",
+		Size = Vector3.new(4, 6, Config.GATE_WIDTH),
+		Position = Vector3.new(-2, 33, 0),
+		Material = Enum.Material.Brick,
+		Color = Color3.fromRGB(150, 110, 90),
+		Parent = parent,
+	})
+	Util.billboard(arch, "🏠 BASE — ZONA SEGURA", Color3.fromRGB(120, 255, 120), 6, 900, UDim2.fromOffset(360, 60))
+
+	-- Parede do fundo
+	Util.part({
+		Name = "ParedeFundo",
+		Size = Vector3.new(10, 40, W + 20),
+		Position = Vector3.new(-B - 5, 20, 0),
+		Material = Enum.Material.Rock,
+		Color = Color3.fromRGB(100, 100, 100),
+		Parent = parent,
+	})
+
+	-- Remove spawns do template (ex.: Baseplate) para todos nascerem na base
+	for _, descendant in ipairs(workspace:GetDescendants()) do
+		if descendant:IsA("SpawnLocation") then
+			descendant:Destroy()
+		end
+	end
+
+	local spawn = Instance.new("SpawnLocation")
+	spawn.Name = "Spawn"
+	spawn.Anchored = true
+	spawn.Size = Vector3.new(14, 1, 14)
+	spawn.Position = Vector3.new(-B / 2 - 10, 0.5, 0)
+	spawn.Neutral = true
+	spawn.Duration = 0
+	spawn.Material = Enum.Material.Neon
+	spawn.Color = Color3.fromRGB(80, 200, 255)
+	spawn.TopSurface = Enum.SurfaceType.Smooth
+	spawn.Parent = parent
+
+	-- Área de depósito (visual: entrar em qualquer ponto da base deposita)
+	local deposit = Util.part({
+		Name = "Deposito",
+		Size = Vector3.new(16, 0.4, Config.GATE_WIDTH),
+		Position = Vector3.new(-10, 0.2, 0),
+		Material = Enum.Material.Neon,
+		Color = Color3.fromRGB(255, 220, 60),
+		Transparency = 0.4,
+		CanCollide = false,
+		Parent = parent,
+	})
+	Util.billboard(deposit, "💰 Entre na base para depositar", Color3.fromRGB(255, 230, 120), 5, 150, UDim2.fromOffset(300, 40))
+
+	-- Loja
+	local shop = Util.part({
+		Name = "Loja",
+		Size = Vector3.new(10, 6, 6),
+		Position = Vector3.new(-B + 12, 3, -W / 4),
+		Material = Enum.Material.WoodPlanks,
+		Color = Color3.fromRGB(160, 110, 60),
+		Parent = parent,
+	})
+	Util.part({
+		Name = "ToldoLoja",
+		Size = Vector3.new(12, 1, 8),
+		Position = Vector3.new(-B + 12, 10, -W / 4),
+		Material = Enum.Material.Fabric,
+		Color = Color3.fromRGB(230, 60, 60),
+		Parent = parent,
+	})
+	Util.billboard(shop, "🛒 LOJA DE MELHORIAS", Color3.fromRGB(255, 255, 255), 9, 200, UDim2.fromOffset(260, 45))
+
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.ActionText = "Abrir loja"
+	prompt.ObjectText = "Loja"
+	prompt.HoldDuration = 0
+	prompt.MaxActivationDistance = 14
+	prompt.RequiresLineOfSight = false
+	prompt.Parent = shop
+
+	return prompt
+end
+
+local function buildZones(parent)
+	for _, zone in ipairs(Config.ZONES) do
+		local length = zone.endX - zone.startX
+		Util.part({
+			Name = "Chao_" .. zone.name,
+			Size = Vector3.new(length, 2, W),
+			Position = Vector3.new(zone.startX + length / 2, -1, 0),
+			Material = zone.material,
+			Color = zone.groundColor,
+			Parent = parent,
+		})
+
+		-- Linha divisória e placa no início da zona
+		Util.part({
+			Name = "Divisa_" .. zone.name,
+			Size = Vector3.new(1, 0.2, W),
+			Position = Vector3.new(zone.startX + 0.5, 0.1, 0),
+			Material = Enum.Material.Neon,
+			Color = zone.color,
+			CanCollide = false,
+			Parent = parent,
+		})
+		for _, side in ipairs({ -1, 1 }) do
+			local post = Util.part({
+				Name = "Placa_" .. zone.name,
+				Size = Vector3.new(1, 10, 1),
+				Position = Vector3.new(zone.startX + 2, 5, side * (W / 2 - 6)),
+				Material = Enum.Material.Wood,
+				Color = Color3.fromRGB(120, 80, 40),
+				Parent = parent,
+			})
+			Util.billboard(post, zone.name .. " • " .. zone.rarity, zone.color, 7, 400, UDim2.fromOffset(240, 50))
+		end
+	end
+end
+
+local function buildSurroundings(parent)
+	-- Penhascos laterais
+	for _, side in ipairs({ -1, 1 }) do
+		Util.part({
+			Name = "Penhasco",
+			Size = Vector3.new(L + B + 20, 40, 12),
+			Position = Vector3.new((L - B) / 2, 20, side * (W / 2 + 6)),
+			Material = Enum.Material.Rock,
+			Color = Color3.fromRGB(105, 95, 85),
+			Parent = parent,
+		})
+	end
+
+	-- Mar
+	Util.part({
+		Name = "Mar",
+		Size = Vector3.new(600, 4, W + 600),
+		Position = Vector3.new(L + 300, -3, 0),
+		Material = Enum.Material.Glass,
+		Color = Color3.fromRGB(40, 130, 220),
+		Transparency = 0.25,
+		Parent = parent,
+	})
+	-- Barreira invisível na beira do mar
+	Util.part({
+		Name = "BarreiraMar",
+		Size = Vector3.new(2, 60, W),
+		Position = Vector3.new(L + 1, 30, 0),
+		Transparency = 1,
+		Parent = parent,
+	})
+end
+
+function MapBuilder.build()
+	local map = Instance.new("Folder")
+	map.Name = "Mapa"
+	map.Parent = workspace
+
+	local shopPrompt = buildBase(map)
+	buildZones(map)
+	buildSurroundings(map)
+
+	local shelterFolder = Instance.new("Folder")
+	shelterFolder.Name = "Abrigos"
+	shelterFolder.Parent = map
+
+	local shelters = {}
+	for _, x in ipairs(Config.SHELTER_X) do
+		for _, z in ipairs(Config.SHELTER_Z) do
+			table.insert(shelters, buildShelter(shelterFolder, x, z))
+		end
+	end
+
+	Lighting.ClockTime = 14
+	Lighting.Brightness = 2
+
+	return {
+		shelters = shelters,
+		shopPrompt = shopPrompt,
+	}
+end
+
+return MapBuilder
+]]></ProtectedString></Properties></Item>
+<Item class="ModuleScript" referent="RBX00000008"><Properties><string name="Name">PlayerData</string><ProtectedString name="Source"><![CDATA[-- Carrega, guarda e salva os dados dos jogadores (DataStore).
+-- Cada campo também vira um atributo do Player para o cliente ler,
+-- e alguns aparecem no placar (leaderstats).
+
+local DataStoreService = game:GetService("DataStoreService")
+
+local PlayerData = {}
+
+local DEFAULTS = {
+	Coins = 0,
+	Waves = 0,
+	SpeedLevel = 0,
+	CapacityLevel = 0,
+}
+
+local LEADERSTATS = {
+	Coins = "Moedas",
+	Waves = "Ondas",
+}
+
+local store
+do
+	local ok, result = pcall(function()
+		return DataStoreService:GetDataStore("FujaDoTsunami_v1")
+	end)
+	if ok then
+		store = result
+	else
+		warn("[PlayerData] DataStore indisponível, progresso não será salvo:", result)
+	end
+end
+
+local cache = {}
+
+function PlayerData.load(player)
+	local data = table.clone(DEFAULTS)
+
+	if store then
+		local ok, saved = pcall(function()
+			return store:GetAsync("player_" .. player.UserId)
+		end)
+		if ok and type(saved) == "table" then
+			for key, value in pairs(saved) do
+				if DEFAULTS[key] ~= nil and type(value) == "number" then
+					data[key] = value
+				end
+			end
+		elseif not ok then
+			warn("[PlayerData] Falha ao carregar dados de", player.Name, saved)
+		end
+	end
+
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"
+	for key, label in pairs(LEADERSTATS) do
+		local value = Instance.new("IntValue")
+		value.Name = label
+		value.Value = data[key]
+		value.Parent = leaderstats
+	end
+	leaderstats.Parent = player
+
+	for key, value in pairs(data) do
+		player:SetAttribute(key, value)
+	end
+
+	cache[player] = data
+	return data
+end
+
+function PlayerData.get(player, key)
+	local data = cache[player]
+	return data and data[key]
+end
+
+function PlayerData.set(player, key, value)
+	local data = cache[player]
+	if not data then
+		return
+	end
+	data[key] = value
+	player:SetAttribute(key, value)
+
+	local label = LEADERSTATS[key]
+	local leaderstats = player:FindFirstChild("leaderstats")
+	local stat = label and leaderstats and leaderstats:FindFirstChild(label)
+	if stat then
+		stat.Value = value
+	end
+end
+
+function PlayerData.increment(player, key, amount)
+	local current = PlayerData.get(player, key)
+	if current then
+		PlayerData.set(player, key, current + amount)
+	end
+end
+
+function PlayerData.save(player)
+	local data = cache[player]
+	if not (store and data) then
+		return
+	end
+	local ok, err = pcall(function()
+		store:SetAsync("player_" .. player.UserId, data)
+	end)
+	if not ok then
+		warn("[PlayerData] Falha ao salvar dados de", player.Name, err)
+	end
+end
+
+function PlayerData.release(player)
+	PlayerData.save(player)
+	cache[player] = nil
+end
+
+function PlayerData.all()
+	return cache
+end
+
+return PlayerData
+]]></ProtectedString></Properties></Item>
+<Item class="ModuleScript" referent="RBX00000009"><Properties><string name="Name">Util</string><ProtectedString name="Source"><![CDATA[-- Funções auxiliares para criar peças e placas flutuantes.
+
+local Util = {}
+
+function Util.part(props)
+	local part = Instance.new("Part")
+	part.Anchored = true
+	part.TopSurface = Enum.SurfaceType.Smooth
+	part.BottomSurface = Enum.SurfaceType.Smooth
+	for key, value in pairs(props) do
+		if key ~= "Parent" then
+			part[key] = value
+		end
+	end
+	part.Parent = props.Parent
+	return part
+end
+
+function Util.billboard(adornee, text, color, offsetY, maxDistance, size)
+	local gui = Instance.new("BillboardGui")
+	gui.Name = "Placa"
+	gui.Size = size or UDim2.fromOffset(220, 50)
+	gui.StudsOffset = Vector3.new(0, offsetY or 3, 0)
+	gui.MaxDistance = maxDistance or 200
+	gui.LightInfluence = 0
+	gui.Adornee = adornee
+
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.fromScale(1, 1)
+	label.BackgroundTransparency = 1
+	label.Text = text
+	label.TextColor3 = color or Color3.new(1, 1, 1)
+	label.TextStrokeTransparency = 0
+	label.Font = Enum.Font.FredokaOne
+	label.TextScaled = true
+	label.Parent = gui
+
+	gui.Parent = adornee
+	return gui
+end
+
+function Util.pickWeighted(list)
+	local total = 0
+	for _, entry in ipairs(list) do
+		total += entry.weight
+	end
+	local roll = math.random() * total
+	for _, entry in ipairs(list) do
+		roll -= entry.weight
+		if roll <= 0 then
+			return entry
+		end
+	end
+	return list[#list]
+end
+
+return Util
+]]></ProtectedString></Properties></Item>
+</Item>
+</Item>
+<Item class="StarterPlayer" referent="RBX00000015"><Properties><string name="Name">StarterPlayer</string></Properties><Item class="StarterPlayerScripts" referent="RBX00000014"><Properties><string name="Name">StarterPlayerScripts</string></Properties><Item class="Folder" referent="RBX00000013"><Properties><string name="Name">Client</string></Properties><Item class="LocalScript" referent="RBX00000012"><Properties><string name="Name">HUD</string><ProtectedString name="Source"><![CDATA[-- Interface do jogador: status do desastre, mochila, moedas, loja e notificações.
+-- Também gira os itens e treme a câmera quando a onda está perto.
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+
+local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
+local remotes = ReplicatedStorage:WaitForChild("Remotes")
+local buyUpgrade = remotes:WaitForChild("BuyUpgrade")
+local notifyEvent = remotes:WaitForChild("Notify")
+local openShopEvent = remotes:WaitForChild("OpenShop")
+
+local player = Players.LocalPlayer
+
+local function create(className, props, children)
+	local instance = Instance.new(className)
+	for key, value in pairs(props) do
+		if key ~= "Parent" then
+			instance[key] = value
+		end
+	end
+	for _, child in ipairs(children or {}) do
+		child.Parent = instance
+	end
+	instance.Parent = props.Parent
+	return instance
+end
+
+local function corner(radius)
+	return create("UICorner", { CornerRadius = UDim.new(0, radius or 10) })
+end
+
+local function stroke()
+	return create("UIStroke", { Thickness = 2, Color = Color3.fromRGB(20, 20, 30), Transparency = 0.3 })
+end
+
+local gui = create("ScreenGui", {
+	Name = "HUD",
+	ResetOnSpawn = false,
+	ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+	Parent = player:WaitForChild("PlayerGui"),
+})
+
+-- Diminui a interface em telas pequenas (celular)
+local uiScale = create("UIScale", { Parent = gui })
+local function updateScale()
+	local camera = workspace.CurrentCamera
+	if camera then
+		uiScale.Scale = math.clamp(camera.ViewportSize.Y / 720, 0.55, 1)
+	end
+end
+workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateScale)
+updateScale()
+
+-- Status do desastre ----------------------------------------------------------
+local statusFrame = create("Frame", {
+	AnchorPoint = Vector2.new(0.5, 0),
+	Position = UDim2.new(0.5, 0, 0, 12),
+	Size = UDim2.fromOffset(520, 56),
+	BackgroundColor3 = Color3.fromRGB(30, 60, 110),
+	Parent = gui,
+}, { corner(14), stroke() })
+
+local statusLabel = create("TextLabel", {
+	Size = UDim2.new(1, -20, 1, 0),
+	Position = UDim2.fromOffset(10, 0),
+	BackgroundTransparency = 1,
+	Font = Enum.Font.FredokaOne,
+	TextScaled = true,
+	TextColor3 = Color3.new(1, 1, 1),
+	Text = "Carregando...",
+	Parent = statusFrame,
+})
+
+local flashTween
+
+local function updateStatus()
+	local phase = ReplicatedStorage:GetAttribute("Phase")
+	local timeLeft = ReplicatedStorage:GetAttribute("TimeLeft") or 0
+	local disaster = ReplicatedStorage:GetAttribute("Disaster") or ""
+
+	if flashTween then
+		flashTween:Cancel()
+		flashTween = nil
+	end
+
+	if phase == "Calmo" then
+		statusFrame.BackgroundColor3 = Color3.fromRGB(30, 60, 110)
+		statusLabel.Text = string.format("☀ Colete itens! Próximo desastre em %ds", timeLeft)
+	elseif phase == "Alerta" then
+		statusFrame.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
+		statusLabel.Text = string.format("⚠ %s em %ds! Corra para um ABRIGO!", disaster, timeLeft)
+		flashTween = TweenService:Create(
+			statusFrame,
+			TweenInfo.new(0.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+			{ BackgroundColor3 = Color3.fromRGB(255, 120, 40) }
+		)
+		flashTween:Play()
+	elseif phase == "Onda" then
+		statusFrame.BackgroundColor3 = Color3.fromRGB(120, 20, 20)
+		statusLabel.Text = string.format("🌊 %s! Fique protegido!", disaster)
+	end
+end
+
+for _, attribute in ipairs({ "Phase", "TimeLeft", "Disaster" }) do
+	ReplicatedStorage:GetAttributeChangedSignal(attribute):Connect(updateStatus)
+end
+updateStatus()
+
+-- Painel do jogador -----------------------------------------------------------
+local infoFrame = create("Frame", {
+	-- No canto superior esquerdo para não ficar embaixo do joystick do celular
+	Position = UDim2.new(0, 12, 0, 80),
+	Size = UDim2.fromOffset(250, 110),
+	BackgroundColor3 = Color3.fromRGB(25, 25, 35),
+	BackgroundTransparency = 0.2,
+	Parent = gui,
+}, {
+	corner(12),
+	stroke(),
+	create("UIPadding", {
+		PaddingLeft = UDim.new(0, 12),
+		PaddingRight = UDim.new(0, 12),
+		PaddingTop = UDim.new(0, 8),
+		PaddingBottom = UDim.new(0, 8),
+	}),
+	create("UIListLayout", { Padding = UDim.new(0, 4) }),
+})
+
+local function infoLine(color)
+	return create("TextLabel", {
+		Size = UDim2.new(1, 0, 0, 28),
+		BackgroundTransparency = 1,
+		Font = Enum.Font.FredokaOne,
+		TextScaled = true,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextColor3 = color,
+		Parent = infoFrame,
+	})
+end
+
+local coinsLabel = infoLine(Color3.fromRGB(255, 220, 60))
+local carryLabel = infoLine(Color3.fromRGB(255, 255, 255))
+local valueLabel = infoLine(Color3.fromRGB(150, 255, 150))
+
+local function updateInfo()
+	local carried = player:GetAttribute("Carried") or 0
+	local maxCarry = player:GetAttribute("MaxCarry") or 0
+	coinsLabel.Text = string.format("💰 Moedas: %d", player:GetAttribute("Coins") or 0)
+	carryLabel.Text = string.format("🎒 Mochila: %d/%d", carried, maxCarry)
+	carryLabel.TextColor3 = carried >= maxCarry and maxCarry > 0 and Color3.fromRGB(255, 120, 80) or Color3.new(1, 1, 1)
+	valueLabel.Text = string.format("💎 Carregando: %d", player:GetAttribute("CarriedValue") or 0)
+end
+
+-- Loja ------------------------------------------------------------------------
+local shopFrame = create("Frame", {
+	AnchorPoint = Vector2.new(0.5, 0.5),
+	Position = UDim2.fromScale(0.5, 0.5),
+	Size = UDim2.fromOffset(440, 330),
+	BackgroundColor3 = Color3.fromRGB(30, 30, 45),
+	Visible = false,
+	Parent = gui,
+}, { corner(16), stroke() })
+
+create("TextLabel", {
+	Size = UDim2.new(1, -60, 0, 50),
+	Position = UDim2.fromOffset(16, 6),
+	BackgroundTransparency = 1,
+	Font = Enum.Font.FredokaOne,
+	TextScaled = true,
+	TextXAlignment = Enum.TextXAlignment.Left,
+	TextColor3 = Color3.new(1, 1, 1),
+	Text = "🛒 Loja de Melhorias",
+	Parent = shopFrame,
+})
+
+local closeButton = create("TextButton", {
+	AnchorPoint = Vector2.new(1, 0),
+	Position = UDim2.new(1, -10, 0, 10),
+	Size = UDim2.fromOffset(40, 40),
+	BackgroundColor3 = Color3.fromRGB(200, 60, 60),
+	Font = Enum.Font.FredokaOne,
+	TextScaled = true,
+	TextColor3 = Color3.new(1, 1, 1),
+	Text = "X",
+	Parent = shopFrame,
+}, { corner(8) })
+
+local rowsFrame = create("Frame", {
+	Position = UDim2.fromOffset(16, 66),
+	Size = UDim2.new(1, -32, 1, -82),
+	BackgroundTransparency = 1,
+	Parent = shopFrame,
+}, { create("UIListLayout", { Padding = UDim.new(0, 12) }) })
+
+local rows = {}
+
+local function refreshShop()
+	local coins = player:GetAttribute("Coins") or 0
+	for key, row in pairs(rows) do
+		local upgrade = Config.UPGRADES[key]
+		local level = player:GetAttribute(upgrade.dataKey) or 0
+		local current = Config.getUpgradeValue(key, level)
+		if level >= upgrade.maxLevel then
+			row.info.Text = string.format("Nível %d/%d • Atual: %d", level, upgrade.maxLevel, current)
+			row.button.Text = "MÁXIMO"
+			row.button.BackgroundColor3 = Color3.fromRGB(90, 90, 100)
+		else
+			local cost = Config.getUpgradeCost(key, level)
+			row.info.Text = string.format(
+				"Nível %d/%d • %d → %d",
+				level,
+				upgrade.maxLevel,
+				current,
+				Config.getUpgradeValue(key, level + 1)
+			)
+			row.button.Text = string.format("💰 %d", cost)
+			row.button.BackgroundColor3 = coins >= cost and Color3.fromRGB(60, 180, 80) or Color3.fromRGB(120, 120, 130)
+		end
+	end
+end
+
+local showToast
+
+for _, key in ipairs(Config.UPGRADE_ORDER) do
+	local upgrade = Config.UPGRADES[key]
+	local row = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 104),
+		BackgroundColor3 = Color3.fromRGB(45, 45, 65),
+		Parent = rowsFrame,
+	}, { corner(12) })
+
+	create("TextLabel", {
+		Position = UDim2.fromOffset(12, 6),
+		Size = UDim2.new(1, -160, 0, 34),
+		BackgroundTransparency = 1,
+		Font = Enum.Font.FredokaOne,
+		TextScaled = true,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextColor3 = Color3.new(1, 1, 1),
+		Text = upgrade.name,
+		Parent = row,
+	})
+	create("TextLabel", {
+		Position = UDim2.fromOffset(12, 42),
+		Size = UDim2.new(1, -160, 0, 22),
+		BackgroundTransparency = 1,
+		Font = Enum.Font.Gotham,
+		TextScaled = true,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextColor3 = Color3.fromRGB(200, 200, 220),
+		Text = upgrade.description,
+		Parent = row,
+	})
+	local info = create("TextLabel", {
+		Position = UDim2.fromOffset(12, 68),
+		Size = UDim2.new(1, -160, 0, 24),
+		BackgroundTransparency = 1,
+		Font = Enum.Font.GothamBold,
+		TextScaled = true,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextColor3 = Color3.fromRGB(150, 220, 255),
+		Parent = row,
+	})
+	local button = create("TextButton", {
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -12, 0.5, 0),
+		Size = UDim2.fromOffset(130, 56),
+		Font = Enum.Font.FredokaOne,
+		TextScaled = true,
+		TextColor3 = Color3.new(1, 1, 1),
+		Parent = row,
+	}, { corner(10) })
+
+	button.Activated:Connect(function()
+		local ok, message = buyUpgrade:InvokeServer(key)
+		showToast(message, ok and Color3.fromRGB(120, 255, 120) or Color3.fromRGB(255, 120, 120))
+		refreshShop()
+	end)
+
+	rows[key] = { info = info, button = button }
+end
+
+local shopButton = create("TextButton", {
+	AnchorPoint = Vector2.new(1, 0.5),
+	Position = UDim2.new(1, -12, 0.5, 0),
+	Size = UDim2.fromOffset(120, 54),
+	BackgroundColor3 = Color3.fromRGB(240, 170, 30),
+	Font = Enum.Font.FredokaOne,
+	TextScaled = true,
+	TextColor3 = Color3.new(1, 1, 1),
+	Text = "🛒 LOJA",
+	Parent = gui,
+}, { corner(12), stroke() })
+
+local function setShopVisible(visible)
+	shopFrame.Visible = visible
+	if visible then
+		refreshShop()
+	end
+end
+
+shopButton.Activated:Connect(function()
+	setShopVisible(not shopFrame.Visible)
+end)
+closeButton.Activated:Connect(function()
+	setShopVisible(false)
+end)
+openShopEvent.OnClientEvent:Connect(function()
+	setShopVisible(true)
+end)
+
+-- Atualiza painel e loja quando os atributos do jogador mudam
+for _, attribute in ipairs({ "Coins", "Carried", "CarriedValue", "MaxCarry", "SpeedLevel", "CapacityLevel" }) do
+	player:GetAttributeChangedSignal(attribute):Connect(function()
+		updateInfo()
+		if shopFrame.Visible then
+			refreshShop()
+		end
+	end)
+end
+updateInfo()
+
+-- Notificações ----------------------------------------------------------------
+local toastFrame = create("Frame", {
+	AnchorPoint = Vector2.new(0.5, 1),
+	Position = UDim2.new(0.5, 0, 1, -130),
+	Size = UDim2.fromOffset(500, 200),
+	BackgroundTransparency = 1,
+	Parent = gui,
+}, {
+	create("UIListLayout", {
+		VerticalAlignment = Enum.VerticalAlignment.Bottom,
+		HorizontalAlignment = Enum.HorizontalAlignment.Center,
+		Padding = UDim.new(0, 4),
+	}),
+})
+
+showToast = function(text, color)
+	local label = create("TextLabel", {
+		Size = UDim2.new(1, 0, 0, 32),
+		BackgroundTransparency = 1,
+		Font = Enum.Font.FredokaOne,
+		TextScaled = true,
+		TextColor3 = color or Color3.new(1, 1, 1),
+		TextStrokeTransparency = 0,
+		Text = text,
+		Parent = toastFrame,
+	})
+
+	local items = toastFrame:GetChildren()
+	local labels = {}
+	for _, child in ipairs(items) do
+		if child:IsA("TextLabel") then
+			table.insert(labels, child)
+		end
+	end
+	if #labels > 5 then
+		labels[1]:Destroy()
+	end
+
+	task.delay(2.5, function()
+		if label.Parent then
+			local tween = TweenService:Create(label, TweenInfo.new(0.5), { TextTransparency = 1, TextStrokeTransparency = 1 })
+			tween:Play()
+			tween.Completed:Wait()
+			label:Destroy()
+		end
+	end)
+end
+
+notifyEvent.OnClientEvent:Connect(showToast)
+
+-- Efeitos locais --------------------------------------------------------------
+RunService.RenderStepped:Connect(function(dt)
+	-- Gira os itens colecionáveis (apenas visual, no cliente)
+	local itemsFolder = workspace:FindFirstChild("Itens")
+	if itemsFolder then
+		local rotation = CFrame.Angles(0, dt * 2, 0)
+		for _, item in ipairs(itemsFolder:GetChildren()) do
+			item.CFrame = item.CFrame * rotation
+		end
+	end
+
+	-- Tremor de câmera quando a onda está perto
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not (humanoid and root) then
+		return
+	end
+
+	local wave = workspace:FindFirstChild("Onda")
+	local body = wave and wave:FindFirstChild("Corpo")
+	if body then
+		local distance = math.abs(body.Position.X - root.Position.X)
+		local intensity = math.clamp(1 - distance / 150, 0, 1) * 0.6
+		humanoid.CameraOffset = Vector3.new(
+			(math.random() - 0.5) * intensity,
+			(math.random() - 0.5) * intensity,
+			(math.random() - 0.5) * intensity
+		)
+	elseif humanoid.CameraOffset ~= Vector3.zero then
+		humanoid.CameraOffset = Vector3.zero
+	end
+end)
+]]></ProtectedString></Properties></Item>
+</Item>
+</Item>
+</Item>
+</roblox>

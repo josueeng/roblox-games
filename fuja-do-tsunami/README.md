@@ -44,7 +44,15 @@ O mapa inteiro é gerado por script, então não precisa montar nada no Studio.
 
 ## Como rodar
 
-### Com Rojo (recomendado)
+### Jeito mais fácil: abrir o arquivo pronto
+
+1. Baixe o arquivo [`FujaDoTsunami.rbxlx`](FujaDoTsunami.rbxlx) (no GitHub: abra o arquivo e clique em **Download raw file**).
+2. Num PC ou Mac com o [Roblox Studio](https://create.roblox.com/) instalado, dê dois cliques no arquivo (ou **File > Open from File**).
+3. Clique em **Play** para testar. Para jogar com amigos ou no celular, siga a seção "Jogar no celular" abaixo.
+
+Se você mudar algo em `src/`, gere o arquivo de novo com `python3 tools/build_rbxlx.py`.
+
+### Com Rojo
 
 1. Instale o [Rojo](https://rojo.space/docs/v7/getting-started/installation/) e o plugin do Rojo no Roblox Studio.
 2. Na pasta `fuja-do-tsunami`, rode:
