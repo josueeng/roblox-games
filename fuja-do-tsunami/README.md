@@ -67,6 +67,18 @@ No Roblox Studio:
    - **ModuleScripts** `MapBuilder`, `ItemSpawner`, `DisasterManager`, `PlayerData` e `Util`.
 3. Em **StarterPlayer > StarterPlayerScripts**, crie um **LocalScript** `HUD` com o conteúdo de `HUD.client.lua`.
 
+### Jogar no celular
+
+O Roblox Studio (onde o jogo é montado) só existe para **PC/Mac**, então não dá para criar ou editar o jogo pelo celular.
+Mas depois de montado, dá para jogar no celular:
+1. No Studio, use **File > Publish to Roblox** para publicar o jogo.
+2. Em **Game Settings > Permissions**, deixe o jogo **Público** (ou só para você/amigos, se preferir).
+3. Em **Game Settings > Basic Info > Devices**, marque **Phone** e **Tablet**.
+4. Abra o app do Roblox no celular, vá em **Criações/Perfil** e entre no jogo.
+
+A interface diminui sozinha em telas pequenas, e o painel fica no topo para não atrapalhar o joystick.
+A loja também abre tocando no botão 🛒 ou no balcão da base.
+
 ### Salvar progresso no Studio
 
 Para testar o DataStore no Studio, publique o jogo e ative

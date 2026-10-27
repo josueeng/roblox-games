@@ -43,6 +43,17 @@ local gui = create("ScreenGui", {
 	Parent = player:WaitForChild("PlayerGui"),
 })
 
+-- Diminui a interface em telas pequenas (celular)
+local uiScale = create("UIScale", { Parent = gui })
+local function updateScale()
+	local camera = workspace.CurrentCamera
+	if camera then
+		uiScale.Scale = math.clamp(camera.ViewportSize.Y / 720, 0.55, 1)
+	end
+end
+workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateScale)
+updateScale()
+
 -- Status do desastre ----------------------------------------------------------
 local statusFrame = create("Frame", {
 	AnchorPoint = Vector2.new(0.5, 0),
@@ -100,8 +111,8 @@ updateStatus()
 
 -- Painel do jogador -----------------------------------------------------------
 local infoFrame = create("Frame", {
-	AnchorPoint = Vector2.new(0, 1),
-	Position = UDim2.new(0, 12, 1, -12),
+	-- No canto superior esquerdo para não ficar embaixo do joystick do celular
+	Position = UDim2.new(0, 12, 0, 80),
 	Size = UDim2.fromOffset(250, 110),
 	BackgroundColor3 = Color3.fromRGB(25, 25, 35),
 	BackgroundTransparency = 0.2,
