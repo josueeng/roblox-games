@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Terto Veículos</title>
+<meta name="description" content="Seminovos, agenciamento e trocas em Petrolina-PE. 15 anos de experiência. Av. Nilo Coelho, nº 115.">
+<meta name="theme-color" content="#f3f4f5">
+<script>document.documentElement.classList.add("js");</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Antonio:wght@300;500;700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: showroom claro e limpo, como a loja — piso cinza-claro, letras altas e estreitas como o
+   "TERTO" da logo, azul da marca nos destaques e cortes diagonais no ângulo das barras do "V".
+   Faixa escura para os sonhos realizados e para o contato. Visual claro único, de propósito. */
+:root {
+  --bg: #f3f4f5;
+  --white: #ffffff;
+  --ink: #0d0f12;
+  --ink-2: #3c434c;
+  --muted: #5f6873;
+  --line: #dde1e5;
+  --blue: #01669e;
+  --blue-2: #0a84c6;
+  --blue-soft: #e3f0f8;
+  --night: #0b1118;
+  --night-2: #131c26;
+  --display: "Antonio", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ease: cubic-bezier(.19, 1, .22, 1);
+  --ease-io: cubic-bezier(.77, 0, .18, 1);
+  --gl: max(20px, env(safe-area-inset-left, 0px));
+  --gr: max(20px, env(safe-area-inset-right, 0px));
+  --slash: polygon(14% 0, 100% 0, 86% 100%, 0 100%);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 500 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body.lock { overflow: hidden; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+::selection { background: var(--blue); color: #fff; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: var(--gl); padding-right: var(--gr); }
+
+.label { display: inline-flex; align-items: center; gap: 10px; font: 700 13px/1 var(--body); letter-spacing: .2em; text-transform: uppercase; color: var(--blue); }
+.label::before { content: ""; width: 6px; height: 18px; background: var(--blue); transform: skewX(-22deg); box-shadow: 9px 0 0 var(--ink), 18px 0 0 var(--ink); margin-right: 18px; }
+.night .label { color: #5fb7ea; }
+.night .label::before { background: #5fb7ea; box-shadow: 9px 0 0 #fff, 18px 0 0 #fff; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+h2 { font-size: clamp(44px, 7vw, 92px); line-height: .95; }
+h1 em, h2 em { font-style: normal; color: var(--blue); }
+.thin { font-weight: 300; }
+p { margin: 0; }
+
+/* Botões */
+.btn {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 17px 26px; border: 1.5px solid var(--ink); cursor: pointer; text-decoration: none;
+  font: 700 15px/1 var(--body); letter-spacing: .1em; text-transform: uppercase;
+  background: transparent; color: var(--ink); transition: color .5s var(--ease), border-color .5s;
+}
+.btn::before { content: ""; position: absolute; inset: -2px -30%; z-index: -1; background: var(--ink); transform: translateX(-101%) skewX(-22deg); transition: transform .6s var(--ease); }
+.btn:hover::before { transform: translateX(0) skewX(-22deg); }
+.btn:hover { color: #fff; }
+.btn-blue { background: var(--blue); border-color: var(--blue); color: #fff; }
+.btn-blue::before { background: var(--ink); }
+.btn-blue:hover { border-color: var(--ink); }
+.night .btn { border-color: #fff; color: #fff; }
+.night .btn::before { background: #fff; }
+.night .btn:hover { color: var(--night); }
+.night .btn-blue { border-color: var(--blue-2); background: var(--blue-2); }
+.btn .arr { width: 18px; height: 18px; transition: transform .5s var(--ease); }
+.btn:hover .arr { transform: translateX(5px); }
+
+/* Abertura */
+#intro { display: none; }
+.js #intro { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--white); transition: clip-path 1.1s var(--ease-io); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+#intro.go { clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); }
+#intro .sweep { position: absolute; inset: -10% -40%; background: var(--blue); transform: translateX(-120%) skewX(-22deg); transition: transform 1s var(--ease-io); }
+#intro.go .sweep { transform: translateX(120%) skewX(-22deg); }
+#intro .mk { position: relative; z-index: 1; display: grid; justify-items: center; gap: 18px; }
+#intro .mk img { width: 110px; clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); animation: wipe 1s var(--ease-io) .1s forwards; }
+#intro .word { display: flex; gap: .55em; font: 500 34px/1 var(--display); overflow: hidden; }
+#intro .word span { display: inline-block; transform: translateY(110%); animation: rise .9s var(--ease) forwards; }
+#intro .sub { font: 500 13px/1 var(--body); letter-spacing: .6em; color: var(--muted); opacity: 0; animation: fadeIn .8s .7s forwards; }
+@keyframes wipe { to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); } }
+@keyframes rise { to { transform: none; } }
+@keyframes fadeIn { to { opacity: 1; } }
+
+#progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 60; background: var(--blue); transform-origin: left; transform: scaleX(0); }
+
+/* Cabeçalho */
+header { position: fixed; inset: 0 0 auto; z-index: 50; padding-top: env(safe-area-inset-top, 0px); transition: background-color .4s, transform .6s var(--ease), box-shadow .4s; }
+header.solid { background: rgba(255,255,255,.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
+header.hide { transform: translateY(-100%); }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 76px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; position: relative; z-index: 2; }
+.brand img { height: 34px; width: auto; transition: transform .7s var(--ease); }
+.brand:hover img { transform: translateX(4px) skewX(-8deg); }
+.brand b { display: block; font: 500 24px/1 var(--display); letter-spacing: .32em; }
+.brand small { display: block; font: 500 10px/1 var(--body); letter-spacing: .5em; color: var(--muted); margin-top: 3px; }
+.nav { display: flex; align-items: center; gap: 32px; }
+.nav a.link { position: relative; font: 600 14px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--ink-2); transition: color .3s; }
+.nav a.link::after { content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 2px; background: var(--blue); transform: scaleX(0); transform-origin: right; transition: transform .5s var(--ease); }
+.nav a.link:hover { color: var(--blue); }
+.nav a.link:hover::after { transform: scaleX(1); transform-origin: left; }
+.nav .btn { padding: 12px 18px; font-size: 13px; }
+.burger { display: none; position: relative; z-index: 2; width: 48px; height: 48px; border: 1.5px solid var(--ink); background: transparent; cursor: pointer; }
+.burger i { position: absolute; left: 13px; right: 13px; height: 2px; background: var(--ink); transition: transform .5s var(--ease), top .5s var(--ease), background-color .4s; }
+.burger i:first-child { top: 18px; } .burger i:last-child { top: 26px; }
+.menu-open .burger { border-color: #fff; }
+.menu-open .burger i { background: #fff; }
+.menu-open .burger i:first-child { top: 22px; transform: rotate(45deg); }
+.menu-open .burger i:last-child { top: 22px; transform: rotate(-45deg); }
+.menu-open .brand { filter: invert(1) brightness(2); }
+.menu { position: fixed; inset: 0; z-index: 1; background: var(--blue); color: #fff; display: grid; align-content: center; gap: 2px; padding: 90px var(--gr) 40px var(--gl); clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); transition: clip-path .8s var(--ease-io); visibility: hidden; }
+.menu-open .menu { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); visibility: visible; }
+.menu a { font: 700 52px/1.05 var(--display); text-transform: uppercase; text-decoration: none; overflow: hidden; display: block; }
+.menu a span { display: inline-block; transform: translateY(105%); transition: transform .7s var(--ease); }
+.menu-open .menu a span { transform: none; transition-delay: calc(250ms + var(--i) * 70ms); }
+.menu .small { margin-top: 24px; font-size: 16px; color: #d6ecf8; }
+@media (max-width: 900px) { .nav { display: none; } .burger { display: block; } }
+
+/* Herói */
+.hero { position: relative; padding: calc(116px + env(safe-area-inset-top, 0px)) 0 0; overflow: hidden; }
+.hero-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+.hero-copy { display: grid; gap: 26px; min-width: 0; }
+.hero h1 { font-size: clamp(56px, 9vw, 132px); line-height: .9; }
+.line { display: block; overflow: hidden; }
+.line > span { display: block; }
+.js .line > span { transform: translateY(102%); transition: transform 1.2s var(--ease); }
+.ready .line > span { transform: none; }
+.ready .line:nth-child(2) > span { transition-delay: .09s; }
+.ready .line:nth-child(3) > span { transition-delay: .18s; }
+.lead { font-size: clamp(17px, 1.5vw, 20px); color: var(--ink-2); max-width: 30em; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.js .fade { opacity: 0; transform: translateY(18px); transition: opacity 1s var(--ease), transform 1s var(--ease); }
+.ready .fade { opacity: 1; transform: none; transition-delay: .45s; }
+.ready .fade.d2 { transition-delay: .6s; } .ready .fade.d3 { transition-delay: .75s; }
+.visual { position: relative; aspect-ratio: 1 / 1.02; }
+.visual .frame { position: absolute; inset: 0 0 0 6%; clip-path: var(--slash); overflow: hidden; background: var(--line); }
+.visual .frame img { width: 100%; height: 115%; object-fit: cover; will-change: transform; }
+.js .visual .frame { clip-path: polygon(14% 0, 14% 0, 0 100%, 0 100%); transition: clip-path 1.5s var(--ease-io); }
+.ready .visual .frame { clip-path: var(--slash); transition-delay: .2s; }
+.bars { position: absolute; left: 0; top: 8%; bottom: 8%; width: 38%; pointer-events: none; }
+.bars i { position: absolute; top: 0; bottom: 0; width: 10%; transform: skewX(-22deg); }
+.bars i:nth-child(1) { left: 0; background: var(--blue); }
+.bars i:nth-child(2) { left: 16%; background: var(--ink); }
+.bars i:nth-child(3) { left: 32%; background: var(--ink); }
+.js .bars i { transform: skewX(-22deg) scaleY(0); transform-origin: top; transition: transform 1s var(--ease-io); }
+.ready .bars i { transform: skewX(-22deg) scaleY(1); }
+.ready .bars i:nth-child(2) { transition-delay: .12s; } .ready .bars i:nth-child(3) { transition-delay: .24s; }
+.bars { left: 11%; width: 16%; top: auto; bottom: 5%; height: 40%; }
+.sticker { position: absolute; right: -4px; bottom: 7%; z-index: 2; background: var(--white); padding: 16px 20px; box-shadow: 0 18px 40px rgba(13,15,18,.15); display: grid; gap: 2px; }
+.sticker b { font: 700 40px/1 var(--display); color: var(--blue); }
+.sticker span { font: 600 13px/1.3 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+.js .sticker { opacity: 0; transform: translateY(24px); transition: opacity .8s, transform 1s var(--ease); }
+.ready .sticker { opacity: 1; transform: none; transition-delay: 1.1s; }
+@media (max-width: 860px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .visual { order: -1; aspect-ratio: 4 / 3.3; }
+  .sticker { padding: 12px 14px; } .sticker b { font-size: 30px; }
+}
+
+/* Números */
+.stats { margin-top: clamp(50px, 8vw, 90px); display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1.5px solid var(--ink); }
+.stat { padding: 24px 24px 30px 0; display: grid; gap: 6px; min-width: 0; }
+.stat + .stat { padding-left: 24px; border-left: 1px solid var(--line); }
+.stat b { font: 700 clamp(48px, 6vw, 80px)/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat b small { font-size: .5em; color: var(--blue); margin-left: 4px; }
+.stat > span { font: 600 14px/1.4 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+@media (max-width: 640px) { .stats { grid-template-columns: 1fr; } .stat, .stat + .stat { padding: 18px 0; border-left: 0; border-bottom: 1px solid var(--line); } }
+
+/* Seções */
+.section { padding-block: clamp(80px, 12vw, 150px); }
+.head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 46px; }
+.head > div:first-child { display: grid; gap: 18px; max-width: 42em; }
+.head p { color: var(--ink-2); }
+.js .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s var(--ease), transform 1s var(--ease); transition-delay: var(--d, 0s); }
+.js .reveal.in { opacity: 1; transform: none; }
+
+/* Serviços */
+.services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.svc { position: relative; overflow: hidden; isolation: isolate; background: var(--white); padding: 34px 30px 36px; display: grid; gap: 14px; align-content: start; min-width: 0; border: 1px solid var(--line); transition: color .6s var(--ease), transform .6s var(--ease), box-shadow .6s; }
+.svc::before { content: ""; position: absolute; inset: 0 -40%; z-index: -1; background: var(--blue); transform: translateY(125%) skewY(-8deg); transition: transform .7s var(--ease); }
+.svc:hover { color: #fff; transform: translateY(-6px); box-shadow: 0 24px 50px rgba(1,102,158,.25); }
+.svc:hover::before { transform: translateY(0) skewY(0); }
+.svc .n { font: 300 64px/1 var(--display); color: var(--blue); transition: color .6s; }
+.svc:hover .n, .svc:hover p { color: #fff; }
+.svc h3 { font-size: 34px; line-height: 1; }
+.svc p { color: var(--ink-2); transition: color .6s; }
+@media (max-width: 860px) { .services { grid-template-columns: 1fr; } }
+
+/* Estoque */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.filters button { position: relative; overflow: hidden; isolation: isolate; cursor: pointer; font: 700 13px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; padding: 13px 18px; border: 1.5px solid var(--line); background: var(--white); color: var(--ink-2); transition: color .4s, border-color .4s; }
+.filters button::before { content: ""; position: absolute; inset: 0 -30%; z-index: -1; background: var(--ink); transform: translateX(-101%) skewX(-22deg); transition: transform .5s var(--ease); }
+.filters button[aria-pressed="true"] { color: #fff; border-color: var(--ink); }
+.filters button[aria-pressed="true"]::before { transform: translateX(0) skewX(-22deg); }
+.stock { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); gap: 22px; }
+.car { background: var(--white); border: 1px solid var(--line); transition: opacity .45s var(--ease), transform .6s var(--ease), box-shadow .5s; }
+.car.out { opacity: 0; transform: scale(.95) translateY(14px); }
+.car:hover { box-shadow: 0 24px 50px rgba(13,15,18,.12); transform: translateY(-4px); }
+.car .ph { position: relative; overflow: hidden; aspect-ratio: 4 / 3.3; cursor: zoom-in; background: var(--line); }
+.car img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--ease); }
+.car:hover img { transform: scale(1.06); }
+.js .car .ph { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transition: clip-path 1.2s var(--ease-io); transition-delay: var(--d, 0s); }
+.js .car.in .ph { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+.car .type { position: absolute; left: 0; bottom: 0; z-index: 1; background: var(--blue); color: #fff; font: 700 12px/1 var(--body); letter-spacing: .14em; text-transform: uppercase; padding: 9px 14px 9px 12px; clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+.car .info { padding: 18px 20px 20px; display: grid; gap: 2px; }
+.car .make { font: 700 13px/1 var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.car h3 { font-size: 34px; line-height: 1.05; }
+.car .meta { font: 600 15px/1.4 var(--body); color: var(--blue); min-height: 1.4em; }
+.car .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.car .row span { font-size: 15px; color: var(--muted); }
+.car .btn { padding: 12px 16px; font-size: 12.5px; }
+@media (max-width: 560px) {
+  .stock { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .car .info { padding: 12px 12px 14px; }
+  .car h3 { font-size: 24px; }
+  .car .make, .car .meta { font-size: 12px; }
+  .car .row { flex-direction: column; align-items: stretch; gap: 8px; margin-top: 10px; padding-top: 10px; }
+  .car .row span { font-size: 13px; }
+  .car .btn { justify-content: center; }
+  .car .type { font-size: 10.5px; padding: 7px 10px 7px 8px; }
+}
+
+/* Sonhos realizados */
+.night { background: var(--night); color: #fff; position: relative; overflow: hidden; }
+.dreams { padding-block: clamp(80px, 12vw, 150px) 0; }
+.dream-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 6vw, 80px); align-items: center; }
+.dream-grid p { color: #b9c4cf; margin-top: 22px; max-width: 30em; }
+.dream-grid .actions { margin-top: 30px; }
+.dream-img { position: relative; clip-path: var(--slash); overflow: hidden; }
+.dream-img img { width: 100%; aspect-ratio: 4 / 3.2; object-fit: cover; }
+.js .dream-img.reveal { clip-path: polygon(100% 0, 100% 0, 86% 100%, 86% 100%); opacity: 1; transform: none; transition: clip-path 1.4s var(--ease-io); }
+.js .dream-img.reveal.in { clip-path: var(--slash); }
+.ticker { margin-top: clamp(60px, 9vw, 110px); border-top: 1px solid rgba(255,255,255,.12); padding-block: 26px; overflow: hidden; }
+.ticker-track { display: flex; width: max-content; animation: tick 30s linear infinite; }
+.ticker span { display: inline-flex; align-items: center; gap: 34px; padding-right: 34px; font: 700 clamp(30px, 4.6vw, 60px)/1 var(--display); text-transform: uppercase; white-space: nowrap; }
+.ticker span:nth-child(even) { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.55); }
+.ticker span::after { content: ""; width: 12px; height: 34px; background: #5fb7ea; transform: skewX(-22deg); }
+@keyframes tick { to { transform: translateX(-50%); } }
+@media (max-width: 860px) { .dream-grid { grid-template-columns: 1fr; } }
+
+/* Condições */
+.faq { border-top: 1.5px solid var(--ink); }
+.qa { border-bottom: 1px solid var(--line); }
+.qa button { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: grid; grid-template-columns: 1fr 44px; gap: 16px; align-items: center; padding: 26px 0; }
+.qa button:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+.qa h3 { font-size: clamp(28px, 3.4vw, 44px); line-height: 1; transition: color .4s; }
+.qa button:hover h3, .qa.open h3 { color: var(--blue); }
+.qa .plus { width: 44px; height: 44px; border: 1.5px solid var(--ink); position: relative; transition: background-color .4s, border-color .4s, transform .6s var(--ease); }
+.qa .plus::before, .qa .plus::after { content: ""; position: absolute; left: 50%; top: 50%; width: 16px; height: 2px; background: var(--ink); transform: translate(-50%, -50%); transition: transform .5s var(--ease), background-color .4s; }
+.qa .plus::after { transform: translate(-50%, -50%) rotate(90deg); }
+.qa.open .plus { background: var(--blue); border-color: var(--blue); transform: rotate(180deg); }
+.qa.open .plus::before, .qa.open .plus::after { background: #fff; }
+.qa.open .plus::after { transform: translate(-50%, -50%) rotate(0); }
+.qa .ans { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .7s var(--ease); }
+.qa.open .ans { grid-template-rows: 1fr; }
+.qa .ans > div { overflow: hidden; }
+.qa .ans p { color: var(--ink-2); max-width: 46em; padding-bottom: 26px; font-size: 18px; }
+
+/* Contato */
+.contact { padding-block: clamp(80px, 12vw, 150px); }
+.contact-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(30px, 6vw, 90px); align-items: end; }
+.contact h2 { font-size: clamp(54px, 8vw, 116px); }
+.contact .actions { margin-top: 34px; }
+.info { margin: 0; display: grid; }
+.info div { display: grid; grid-template-columns: 130px 1fr; gap: 16px; padding: 20px 0; border-top: 1px solid rgba(255,255,255,.14); }
+.info div:last-child { border-bottom: 1px solid rgba(255,255,255,.14); }
+.info dt { font: 700 13px/1.7 var(--body); letter-spacing: .16em; text-transform: uppercase; color: #5fb7ea; }
+.info dd { margin: 0; font-size: 18px; }
+.info a { text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.3); }
+@media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; } .info div { grid-template-columns: 1fr; gap: 4px; } }
+footer { background: var(--night); color: #8d99a6; }
+.big { font: 700 clamp(70px, 21vw, 320px)/.8 var(--display); letter-spacing: .12em; text-align: center; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.14); white-space: nowrap; user-select: none; padding-top: 20px; }
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; padding-block: 24px calc(24px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid rgba(255,255,255,.1); font-size: 15px; }
+
+/* Foto ampliada */
+.lb { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 20px var(--gr) 20px var(--gl); background: rgba(11,17,24,.9); backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: opacity .45s var(--ease), visibility .45s; }
+.lb.open { opacity: 1; visibility: visible; }
+.lb-box { width: min(920px, 100%); display: grid; grid-template-columns: 1.2fr .8fr; background: var(--white); transform: translateY(30px) scale(.97); transition: transform .7s var(--ease); max-height: calc(100svh - 40px); overflow: auto; }
+.lb.open .lb-box { transform: none; }
+.lb-box img { width: 100%; height: 100%; object-fit: cover; min-height: 280px; }
+.lb-text { padding: 30px; display: grid; gap: 14px; align-content: center; position: relative; }
+.lb-text h3 { font-size: 46px; line-height: 1; }
+.lb-text p { color: var(--ink-2); }
+.lb-close { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border: 1.5px solid var(--ink); background: transparent; cursor: pointer; font-size: 22px; line-height: 1; }
+@media (max-width: 700px) { .lb-box { grid-template-columns: 1fr; } .lb-box img { max-height: 46vh; } }
+
+.float { position: fixed; z-index: 40; right: calc(18px + env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); height: 56px; padding: 0 20px; display: flex; align-items: center; gap: 10px; background: var(--blue); color: #fff; text-decoration: none; font: 700 14px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; box-shadow: 0 14px 30px rgba(1,102,158,.4); transform: translateY(140%); transition: transform .7s var(--ease); }
+.float.show { transform: none; }
+.float svg { width: 20px; height: 20px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+  .js #intro { display: none; }
+  .js .reveal, .js .line > span, .js .fade, .js .sticker, .js .bars i, .js .car .ph, .js .visual .frame, .js .dream-img.reveal { opacity: 1; transform: none; clip-path: none; }
+  .ticker-track { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="arr" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+  <symbol id="chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5h16v11H9l-5 4V5Z"/></symbol>
+</svg>
+
+<div id="intro" aria-hidden="true">
+  <div class="mk">
+    <img src="img/marca-escura.png" data-img="marca-escura" alt="">
+    <div class="word"><span style="animation-delay:.35s">T</span><span style="animation-delay:.42s">E</span><span style="animation-delay:.49s">R</span><span style="animation-delay:.56s">T</span><span style="animation-delay:.63s">O</span></div>
+    <div class="sub">VEÍCULOS</div>
+  </div>
+  <div class="sweep"></div>
+</div>
+<div id="progress"></div>
+
+<header id="top">
+  <div class="wrap bar">
+    <a class="brand" href="#inicio" aria-label="Terto Veículos, início">
+      <img src="img/marca-escura.png" data-img="marca-escura" alt="">
+      <span><b>TERTO</b><small>VEÍCULOS</small></span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a class="link" href="#servicos">Serviços</a>
+      <a class="link" href="#estoque">Estoque</a>
+      <a class="link" href="#condicoes">Condições</a>
+      <a class="link" href="#contato">Localização</a>
+      <a class="btn btn-blue contact-link" href="#">Fale conosco</a>
+    </nav>
+    <button class="burger" type="button" id="burger" aria-label="Abrir menu" aria-expanded="false"><i></i><i></i></button>
+    <div class="menu">
+      <a href="#servicos" style="--i:0"><span>Serviços</span></a>
+      <a href="#estoque" style="--i:1"><span>Estoque</span></a>
+      <a href="#condicoes" style="--i:2"><span>Condições</span></a>
+      <a href="#contato" style="--i:3"><span>Localização</span></a>
+      <p class="small">Av. Nilo Coelho, nº 115 · Petrolina, PE</p>
+    </div>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="label fade">Seminovos · Agenciamento · Trocas</span>
+          <h1>
+            <span class="line"><span>Fala, turma!</span></span>
+            <span class="line"><span class="thin">Vem realizar</span></span>
+            <span class="line"><span><em>teu sonho.</em></span></span>
+          </h1>
+          <p class="lead fade d2">São 15 anos de experiência com seminovos em Petrolina. Carros selecionados, agenciamento do seu veículo e trocas, tudo num lugar só.</p>
+          <div class="actions fade d3">
+            <a class="btn btn-blue contact-link" href="#">Fale conosco <svg class="arr" aria-hidden="true"><use href="#arr"/></svg></a>
+            <a class="btn" href="#estoque">Ver estoque</a>
+          </div>
+        </div>
+        <div class="visual">
+          <div class="bars"><i></i><i></i><i></i></div>
+          <div class="frame"><img src="img/showroom.jpg" data-img="showroom" alt="Showroom da Terto Veículos com SUVs seminovos" id="heroImg"></div>
+          <div class="sticker"><b>15 anos</b><span>de experiência</span></div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat reveal"><b><span data-count="15">0</span><small>anos</small></b><span>De experiência</span></div>
+        <div class="stat reveal" style="--d:.08s"><b><span data-count="44">0</span><small>mil</small></b><span>Seguidores no Instagram</span></div>
+        <div class="stat reveal" style="--d:.16s"><b><span data-count="3">0</span><small>serviços</small></b><span>Seminovos, agenciamento e trocas</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="servicos">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="label reveal">O que fazemos</span>
+          <h2 class="reveal" style="--d:.08s">Três jeitos de<br><em>sair de carro novo</em></h2>
+        </div>
+      </div>
+      <div class="services">
+        <article class="svc reveal"><span class="n">01</span><h3>Seminovos</h3><p>Carros selecionados, prontos para você sair dirigindo. Venha ver de perto no showroom.</p></article>
+        <article class="svc reveal" style="--d:.08s"><span class="n">02</span><h3>Agenciamento</h3><p>Quer vender o seu carro? A gente anuncia, mostra e negocia por você, com a vitrine da Terto.</p></article>
+        <article class="svc reveal" style="--d:.16s"><span class="n">03</span><h3>Trocas</h3><p>Use o seu carro atual como parte do pagamento e saia com um seminovo.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="estoque" style="padding-top:0">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="label reveal">Estoque</span>
+          <h2 class="reveal" style="--d:.08s">Escolha o<br><em>próximo carro</em></h2>
+          <p class="reveal" style="--d:.16s">Toque no carro para ver de perto. O estoque muda toda semana, então pergunte também pelo modelo que você procura.</p>
+        </div>
+        <div class="filters reveal" style="--d:.2s" role="group" aria-label="Filtrar por tipo">
+          <button type="button" data-f="all" aria-pressed="true">Todos</button>
+          <button type="button" data-f="suv" aria-pressed="false">SUV</button>
+          <button type="button" data-f="picape" aria-pressed="false">Picape</button>
+          <button type="button" data-f="seda" aria-pressed="false">Sedã</button>
+        </div>
+      </div>
+      <div class="stock" id="stock"></div>
+    </div>
+  </section>
+
+  <section class="night dreams">
+    <div class="wrap dream-grid">
+      <div>
+        <span class="label reveal">Clientes</span>
+        <h2 class="reveal" style="--d:.08s;margin-top:18px">Mais um<br><em style="color:#5fb7ea">sonho realizado</em><br>com a Terto</h2>
+        <p class="reveal" style="--d:.16s">Toda semana tem família saindo da loja de carro novo. Veja as entregas no nosso Instagram.</p>
+        <div class="actions reveal" style="--d:.24s"><a class="btn" href="https://www.instagram.com/tertoveiculospnz/" target="_blank" rel="noopener">Ver no Instagram <svg class="arr" aria-hidden="true"><use href="#arr"/></svg></a></div>
+      </div>
+      <div class="dream-img reveal"><img src="img/compass.jpg" data-img="compass" alt="Jeep Compass branco no showroom da Terto Veículos"></div>
+    </div>
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>Mais um sonho realizado</span><span>Terto Veículos</span><span>Mais um sonho realizado</span><span>Terto Veículos</span>
+        <span>Mais um sonho realizado</span><span>Terto Veículos</span><span>Mais um sonho realizado</span><span>Terto Veículos</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="condicoes">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="label reveal">Condições</span>
+          <h2 class="reveal" style="--d:.08s">Como funciona<br><em>na Terto</em></h2>
+        </div>
+      </div>
+      <div class="faq reveal">
+        <div class="qa open"><button type="button" aria-expanded="true"><h3>Como compro um seminovo?</h3><span class="plus" aria-hidden="true"></span></button>
+          <div class="ans"><div><p>Escolha o carro aqui no site ou venha ao showroom na Av. Nilo Coelho. Fale com a gente para tirar dúvidas, ver o carro de perto e combinar as condições.</p></div></div></div>
+        <div class="qa"><button type="button" aria-expanded="false"><h3>Posso dar meu carro na troca?</h3><span class="plus" aria-hidden="true"></span></button>
+          <div class="ans"><div><p>Sim. Trabalhamos com trocas: o seu carro atual entra como parte do pagamento do seminovo. Traga o carro para avaliação.</p></div></div></div>
+        <div class="qa"><button type="button" aria-expanded="false"><h3>Como funciona o agenciamento?</h3><span class="plus" aria-hidden="true"></span></button>
+          <div class="ans"><div><p>Você deixa o seu carro com a Terto e a gente cuida da venda: divulgação, atendimento aos interessados e negociação.</p></div></div></div>
+        <div class="qa"><button type="button" aria-expanded="false"><h3>Quais as formas de pagamento?</h3><span class="plus" aria-hidden="true"></span></button>
+          <div class="ans"><div><p>Fale com a gente para conhecer as condições de pagamento disponíveis para o carro que você escolheu.</p></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="night contact" id="contato">
+    <div class="wrap contact-grid">
+      <div>
+        <span class="label reveal">Localização</span>
+        <h2 class="reveal" style="--d:.08s;margin-top:18px">Vem pra<br><em style="color:#5fb7ea">Terto</em></h2>
+        <div class="actions reveal" style="--d:.16s">
+          <a class="btn btn-blue contact-link" href="#">Fale conosco <svg class="arr" aria-hidden="true"><use href="#arr"/></svg></a>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Av.+Nilo+Coelho+115+Petrolina+PE" target="_blank" rel="noopener">Abrir no mapa</a>
+        </div>
+      </div>
+      <dl class="info reveal" style="--d:.2s">
+        <div><dt>Endereço</dt><dd>Av. Nilo Coelho, nº 115<br>Petrolina – PE</dd></div>
+        <div><dt>Contato</dt><dd><a class="contact-link" href="#">linktr.ee/tertoveiculospnz</a></dd></div>
+        <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/tertoveiculospnz/" target="_blank" rel="noopener">@tertoveiculospnz</a></dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="big" aria-hidden="true">TERTO</div>
+  <div class="wrap foot"><span>© <span id="year"></span> Terto Veículos · Petrolina, PE</span><span>Seminovos, agenciamento e trocas</span></div>
+</footer>
+
+<a class="float contact-link" id="float" href="#"><svg aria-hidden="true"><use href="#chat"/></svg>Fale conosco</a>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbTitle" aria-hidden="true">
+  <div class="lb-box">
+    <img id="lbImg" alt="">
+    <div class="lb-text">
+      <button class="lb-close" type="button" id="lbClose" aria-label="Fechar">×</button>
+      <span class="label" id="lbMake"></span>
+      <h3 id="lbTitle"></h3>
+      <p id="lbMeta"></p>
+      <p>Pergunte pelo valor, quilometragem e condições. Aceitamos o seu carro na troca.</p>
+      <div><a class="btn btn-blue contact-link" href="#">Tenho interesse <svg class="arr" aria-hidden="true"><use href="#arr"/></svg></a></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const IMAGES = window.__IMAGES || {};
+  const IMG = (n) => IMAGES[n] || (n.startsWith("marca") || n.startsWith("logo") ? `img/${n}.png` : `img/${n}.jpg`);
+  const CONTACT = "https://linktr.ee/tertoveiculospnz";
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  const CARS = [
+    { img: "t-cross", make: "Volkswagen", model: "T-Cross", meta: "Highline · 2026", type: "suv", label: "SUV" },
+    { img: "compass", make: "Jeep", model: "Compass", meta: "2021", type: "suv", label: "SUV" },
+    { img: "frontier", make: "Nissan", model: "Frontier", meta: "SL · 2014 · Automática", type: "picape", label: "Picape" },
+    { img: "tracker", make: "Chevrolet", model: "Tracker", meta: "", type: "suv", label: "SUV" },
+    { img: "renegade", make: "Jeep", model: "Renegade", meta: "", type: "suv", label: "SUV" },
+    { img: "siena", make: "Fiat", model: "Siena", meta: "", type: "seda", label: "Sedã" },
+  ];
+
+  $$("img[data-img]").forEach((im) => (im.src = IMG(im.dataset.img)));
+  const bindContact = (root = document) => $$(".contact-link", root).forEach((a) => { a.href = CONTACT; a.target = "_blank"; a.rel = "noopener"; });
+  bindContact();
+
+  // Abertura
+  const intro = $("#intro");
+  const start = () => document.body.classList.add("ready");
+  if (reduce) { intro.remove(); start(); }
+  else {
+    setTimeout(() => { intro.classList.add("go"); setTimeout(start, 250); }, 1500);
+    setTimeout(() => intro.remove(), 2800);
+  }
+
+  // Revelações
+  const io = "IntersectionObserver" in window ? new IntersectionObserver((es) => es.forEach((e) => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add("in");
+    e.target.querySelectorAll("[data-count]").forEach(count);
+    if (e.target.dataset.count) count(e.target);
+    io.unobserve(e.target);
+  }), { rootMargin: "0px 0px -8% 0px", threshold: .1 }) : null;
+  const watch = (el) => (io ? io.observe(el) : (el.classList.add("in"), el.querySelectorAll("[data-count]").forEach(count)));
+
+  // Contadores
+  function count(el) {
+    if (el.dataset.done) return; el.dataset.done = 1;
+    const end = +el.dataset.count;
+    if (reduce) { el.textContent = end; return; }
+    const t0 = performance.now(), dur = 1600;
+    const step = (t) => { const k = Math.min(1, (t - t0) / dur); el.textContent = Math.round(end * (1 - Math.pow(1 - k, 4))); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+
+  // Estoque
+  const stock = $("#stock"), lb = $("#lb");
+  CARS.forEach((c, i) => {
+    const el = document.createElement("article");
+    el.className = "car reveal"; el.dataset.type = c.type;
+    el.style.setProperty("--d", `${(i % 3) * .1}s`);
+    el.innerHTML = `
+      <div class="ph" role="button" tabindex="0" aria-label="Ver ${c.make} ${c.model} de perto"><img src="${IMG(c.img)}" alt="${c.make} ${c.model} na Terto Veículos"><span class="type">${c.label}</span></div>
+      <div class="info"><span class="make">${c.make}</span><h3>${c.model}</h3><span class="meta">${c.meta || "Consulte versão e ano"}</span>
+        <div class="row"><span>Consulte valores</span><a class="btn btn-blue contact-link" href="#">Quero</a></div></div>`;
+    const ph = el.querySelector(".ph");
+    ph.addEventListener("click", () => openLb(c));
+    ph.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLb(c); } });
+    stock.appendChild(el); bindContact(el); watch(el);
+  });
+  let ft;
+  $$(".filters button").forEach((b) => b.addEventListener("click", () => {
+    $$(".filters button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    const f = b.dataset.f, cards = $$(".car", stock);
+    cards.forEach((c) => c.classList.add("out"));
+    clearTimeout(ft);
+    ft = setTimeout(() => {
+      cards.forEach((c) => (c.hidden = f !== "all" && c.dataset.type !== f));
+      requestAnimationFrame(() => requestAnimationFrame(() => cards.filter((c) => !c.hidden).forEach((c, i) => {
+        c.style.transitionDelay = `${i * 60}ms`; c.classList.remove("out"); c.classList.add("in");
+        setTimeout(() => (c.style.transitionDelay = ""), 900);
+      })));
+    }, reduce ? 0 : 300);
+  }));
+
+  // Foto ampliada
+  let lastFocus;
+  function openLb(c) {
+    $("#lbImg").src = IMG(c.img); $("#lbImg").alt = `${c.make} ${c.model}`;
+    $("#lbMake").textContent = c.make; $("#lbTitle").textContent = c.model;
+    $("#lbMeta").textContent = c.meta || "Consulte versão e ano";
+    lastFocus = document.activeElement;
+    lb.classList.add("open"); lb.setAttribute("aria-hidden", "false"); document.body.classList.add("lock");
+    $("#lbClose").focus();
+  }
+  function closeLb() { lb.classList.remove("open"); lb.setAttribute("aria-hidden", "true"); document.body.classList.remove("lock"); lastFocus?.focus(); }
+  $("#lbClose").addEventListener("click", closeLb);
+  lb.addEventListener("click", (e) => { if (e.target === lb) closeLb(); });
+
+  // Condições (sanfona)
+  $$(".qa").forEach((qa) => qa.querySelector("button").addEventListener("click", () => {
+    const open = !qa.classList.contains("open");
+    $$(".qa").forEach((o) => { o.classList.remove("open"); o.querySelector("button").setAttribute("aria-expanded", "false"); });
+    if (open) { qa.classList.add("open"); qa.querySelector("button").setAttribute("aria-expanded", "true"); }
+  }));
+
+  // Menu
+  const burger = $("#burger");
+  const setMenu = (o) => { document.body.classList.toggle("menu-open", o); document.body.classList.toggle("lock", o); burger.setAttribute("aria-expanded", String(o)); burger.setAttribute("aria-label", o ? "Fechar menu" : "Abrir menu"); };
+  burger.addEventListener("click", () => setMenu(!document.body.classList.contains("menu-open")));
+  $$(".menu a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
+  addEventListener("keydown", (e) => { if (e.key === "Escape") { closeLb(); setMenu(false); } });
+
+  $$(".reveal").forEach((el) => { if (!el.classList.contains("car")) watch(el); });
+
+  // Rolagem: cabeçalho, progresso, botão flutuante e parallax da foto do topo
+  const header = $("#top"), float = $("#float"), prog = $("#progress"), heroImg = $("#heroImg");
+  let lastY = 0, tick = false;
+  function onScroll() {
+    if (tick) return; tick = true;
+    requestAnimationFrame(() => {
+      const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+      header.classList.toggle("solid", y > 30);
+      header.classList.toggle("hide", y > lastY && y > 500 && !document.body.classList.contains("menu-open"));
+      float.classList.toggle("show", y > innerHeight * .7);
+      prog.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+      if (!reduce && y < innerHeight * 1.2) heroImg.style.transform = `translateY(${-y * 0.08}px)`;
+      lastY = y; tick = false;
+    });
+  }
+  addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  $("#year").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
