@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jefson Veículos</title>
+<meta name="description" content="Seminovos com padrão de qualidade e procedência em Petrolina-PE. Av. Nilo Coelho, 35, Gercino Coelho.">
+<meta name="theme-color" content="#0f0f10">
+<script>document.documentElement.classList.add("js");</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,600;112..125,700;112..125,800&family=Barlow:wght@500;600;700&family=Barlow+Condensed:wght@600;700&display=swap">
+<style>
+/* Layout: showroom noturno — herói com o carro "entrando" em cena sobre uma lâmina bordô,
+   faixa de marcas, estoque filtrável, motivos para comprar, entregas e localização.
+   Cores tiradas da logo: bordô, prata metálico, branco e grafite. Visual escuro único. */
+:root {
+  --bg: #0f0f10;
+  --graphite: #18181a;
+  --steel: #232326;
+  --line: rgba(255, 255, 255, .1);
+  --white: #f5f5f4;
+  --silver: #b9bcc1;
+  --silver-2: #8b8f96;
+  --wine: #7a120c;
+  --wine-2: #9b1a12;
+  --red: #c8231a;
+  --display: "Archivo", "Arial Black", system-ui, sans-serif;
+  --body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cond: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --ease: cubic-bezier(.19, 1, .22, 1);
+  --ease-io: cubic-bezier(.77, 0, .18, 1);
+  --gl: max(20px, env(safe-area-inset-left, 0px));
+  --gr: max(20px, env(safe-area-inset-right, 0px));
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--white); font: 500 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body.lock { overflow: hidden; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+::selection { background: var(--wine-2); color: #fff; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: var(--gl); padding-right: var(--gr); }
+
+.tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  font: 700 14px/1 var(--cond); letter-spacing: .14em; text-transform: uppercase; color: var(--silver);
+}
+.tag::before { content: ""; width: 26px; height: 3px; background: var(--red); transform: skewX(-30deg); }
+h1, h2, h3 { font-family: var(--display); font-stretch: 125%; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: -.01em; text-wrap: balance; }
+h2 { font-size: clamp(34px, 5.4vw, 68px); line-height: .98; }
+.metal {
+  background: linear-gradient(180deg, #ffffff 0%, #d7d9dc 45%, #8e9298 55%, #e9eaec 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.red { color: var(--red); }
+p { margin: 0; }
+
+/* Botões */
+.btn {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 24px; border: 0; cursor: pointer; text-decoration: none;
+  font: 700 16px/1 var(--cond); letter-spacing: .1em; text-transform: uppercase;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  background: var(--steel); color: var(--white);
+}
+.btn::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; background: var(--white);
+  transform: translateX(-105%) skewX(-20deg); transition: transform .55s var(--ease);
+}
+.btn:hover::after { transform: translateX(0) skewX(0); }
+.btn:hover { color: var(--bg); }
+.btn-red { background: var(--red); color: #fff; }
+.btn svg { width: 19px; height: 19px; flex: none; }
+
+/* Abertura */
+#intro { display: none; }
+.js #intro { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; pointer-events: none; }
+#intro .panel { position: absolute; inset: 0; background: var(--bg); transition: transform 1s var(--ease-io); }
+#intro .panel.p2 { background: var(--wine); transform: translateX(-100%); transition-delay: .05s; }
+#intro .panel.p3 { background: var(--silver); transform: translateX(-100%); }
+#intro.go .p3 { transform: translateX(100%); transition-delay: 0s; }
+#intro.go .p2 { transform: translateX(100%); transition-delay: .08s; }
+#intro.go .p1 { transform: translateX(100%); transition-delay: .16s; }
+#intro .sweep .p2, #intro .sweep .p3 { transform: translateX(0); }
+#intro img { position: relative; z-index: 2; width: 150px; height: 150px; animation: spinIn 1.1s var(--ease) both; transition: opacity .3s, transform .6s var(--ease-io); }
+#intro.go img { opacity: 0; transform: scale(.7); }
+#intro .road { position: absolute; z-index: 2; bottom: 32%; left: 50%; width: 180px; height: 3px; margin-left: -90px; background: var(--line); overflow: hidden; transition: opacity .3s; }
+#intro .road i { display: block; height: 100%; width: 100%; background: var(--red); transform-origin: left; animation: fill 1.1s var(--ease-io) .1s both; }
+#intro.go .road { opacity: 0; }
+@keyframes spinIn { from { opacity: 0; transform: scale(.6) rotate(-90deg); } }
+@keyframes fill { from { transform: scaleX(0); } }
+
+/* Barra de progresso de rolagem */
+#progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 60; background: var(--red); transform-origin: left; transform: scaleX(0); }
+
+/* Cabeçalho */
+header {
+  position: fixed; inset: 0 0 auto; z-index: 50; padding-top: env(safe-area-inset-top, 0px);
+  transition: background-color .4s, transform .6s var(--ease), border-color .4s; border-bottom: 1px solid transparent;
+}
+header.solid { background: rgba(15, 15, 16, .86); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-color: var(--line); }
+header.hide { transform: translateY(-100%); }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 74px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; position: relative; z-index: 2; }
+.brand img { width: 46px; height: 46px; transition: transform .8s var(--ease); }
+.brand:hover img { transform: rotate(-360deg); }
+.brand b { display: block; font: 800 19px/1 var(--display); font-stretch: 125%; letter-spacing: .04em; }
+.brand small { display: block; font: 700 12px/1 var(--cond); letter-spacing: .3em; color: var(--silver); margin-top: 4px; }
+.nav { display: flex; align-items: center; gap: 30px; }
+.nav a.link { position: relative; font: 700 15px/1 var(--cond); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--silver); transition: color .3s; }
+.nav a.link::after { content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: right; transition: transform .5s var(--ease); }
+.nav a.link:hover { color: var(--white); }
+.nav a.link:hover::after { transform: scaleX(1); transform-origin: left; }
+.nav .btn { padding: 12px 18px; font-size: 15px; }
+.burger { display: none; position: relative; z-index: 2; width: 48px; height: 48px; border: 1px solid var(--line); background: transparent; cursor: pointer; clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+.burger i { position: absolute; left: 14px; right: 14px; height: 2px; background: var(--white); transition: transform .5s var(--ease), top .5s var(--ease); }
+.burger i:first-child { top: 19px; } .burger i:last-child { top: 27px; }
+.menu-open .burger i:first-child { top: 23px; transform: rotate(45deg); }
+.menu-open .burger i:last-child { top: 23px; transform: rotate(-45deg); }
+.menu {
+  position: fixed; inset: 0; z-index: 1; background: var(--wine);
+  display: grid; align-content: center; gap: 4px; padding: 90px var(--gr) 40px var(--gl);
+  clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); transition: clip-path .8s var(--ease-io); visibility: hidden;
+}
+.menu-open .menu { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); visibility: visible; }
+.menu a { font: 800 40px/1.15 var(--display); font-stretch: 125%; text-transform: uppercase; text-decoration: none; overflow: hidden; display: block; }
+.menu a span { display: inline-block; transform: translateX(-110%); transition: transform .7s var(--ease); }
+.menu-open .menu a span { transform: none; transition-delay: calc(250ms + var(--i) * 70ms); }
+.menu .small { margin-top: 26px; font: 600 16px/1.6 var(--body); color: #f1c9c5; }
+@media (max-width: 900px) { .nav { display: none; } .burger { display: block; } }
+
+/* Herói */
+.hero { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: hidden; padding: calc(100px + env(safe-area-inset-top, 0px)) 0 70px; }
+.speed { position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background: repeating-linear-gradient(90deg, transparent 0 140px, rgba(255,255,255,.035) 140px 141px);
+}
+.speed::before, .speed::after {
+  content: ""; position: absolute; height: 2px; width: 40%; right: -40%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.5));
+  animation: streak 3.4s linear infinite;
+}
+.speed::before { top: 28%; }
+.speed::after { top: 71%; animation-delay: 1.7s; animation-duration: 2.6s; }
+@keyframes streak { to { transform: translateX(-360%); } }
+.hero-grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 5vw, 70px); align-items: center; }
+.hero h1 { font-size: clamp(30px, 9.2vw, 60px); line-height: .94; }
+@media (min-width: 861px) { .hero h1 { font-size: min(4.3vw, 60px); } }
+.line { display: block; overflow: hidden; padding-bottom: .04em; }
+.line > span { display: block; }
+.js .line > span { transform: translateY(105%); transition: transform 1.2s var(--ease); }
+.ready .line > span { transform: none; }
+.ready .line:nth-child(2) > span { transition-delay: .1s; }
+.ready .line:nth-child(3) > span { transition-delay: .2s; }
+.hero-copy { display: grid; gap: 26px; min-width: 0; }
+.lead { font-size: clamp(17px, 1.5vw, 20px); color: var(--silver); max-width: 30em; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.hash { font: 700 15px/1 var(--cond); letter-spacing: .18em; color: var(--red); }
+.js .fade { opacity: 0; transform: translateY(18px); transition: opacity 1s var(--ease), transform 1s var(--ease); }
+.ready .fade { opacity: 1; transform: none; transition-delay: .4s; }
+.ready .fade.d2 { transition-delay: .55s; } .ready .fade.d3 { transition-delay: .7s; }
+
+.showcase { position: relative; aspect-ratio: 4 / 4.6; }
+.slab { position: absolute; inset: 8% -30% 4% 14%; background: linear-gradient(135deg, var(--wine-2), var(--wine) 60%, #3d0805); clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%); }
+.js .slab { transform: translateX(60%); transition: transform 1.3s var(--ease); }
+.ready .slab { transform: none; transition-delay: .1s; }
+.car { position: absolute; inset: 0 8% 10% 0; overflow: hidden; clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); box-shadow: 0 30px 60px rgba(0,0,0,.5); }
+.car img { width: 100%; height: 100%; object-fit: cover; }
+.js .car { transform: translateX(-30%); opacity: 0; filter: blur(12px); transition: transform 1.4s var(--ease), opacity .8s, filter 1.2s var(--ease); }
+.ready .car { transform: none; opacity: 1; filter: none; transition-delay: .25s; }
+.plate {
+  position: absolute; left: 6%; bottom: 3%; z-index: 2; background: var(--white); color: var(--bg);
+  padding: 12px 16px; display: grid; gap: 2px; clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.plate b { font: 800 18px/1 var(--display); font-stretch: 125%; text-transform: uppercase; }
+.plate span { font: 700 13px/1 var(--cond); letter-spacing: .14em; text-transform: uppercase; color: var(--wine); }
+.js .plate { opacity: 0; transform: translateY(20px); transition: opacity .8s, transform .9s var(--ease); }
+.ready .plate { opacity: 1; transform: none; transition-delay: 1s; }
+@media (max-width: 860px) {
+  .hero { min-height: auto; padding-top: calc(96px + env(safe-area-inset-top, 0px)); }
+  .hero-grid { grid-template-columns: 1fr; }
+  .showcase { order: -1; aspect-ratio: 4 / 3.6; margin-right: 10px; }
+}
+
+/* Faixa de marcas */
+.brands { background: var(--red); overflow: hidden; padding-block: 18px; transform: skewY(-2deg); margin-block: 10px; }
+.brands-track { display: flex; width: max-content; animation: roll 28s linear infinite; }
+.brands span { display: inline-flex; align-items: center; gap: 30px; padding-right: 30px; font: 800 clamp(22px, 3vw, 34px)/1 var(--display); font-stretch: 125%; text-transform: uppercase; white-space: nowrap; }
+.brands span::after { content: ""; width: 26px; height: 6px; background: var(--bg); transform: skewX(-30deg); }
+@keyframes roll { to { transform: translateX(-50%); } }
+
+/* Seções */
+.section { padding-block: clamp(80px, 12vw, 150px); }
+.head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 44px; }
+.head > div:first-child { display: grid; gap: 16px; max-width: 40em; }
+.head p { color: var(--silver); }
+
+/* Revelações */
+.js .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s var(--ease), transform 1s var(--ease); transition-delay: var(--d, 0s); }
+.js .reveal.in { opacity: 1; transform: none; }
+
+/* Estoque */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.filters button {
+  position: relative; overflow: hidden; isolation: isolate; cursor: pointer;
+  font: 700 15px/1 var(--cond); letter-spacing: .12em; text-transform: uppercase;
+  padding: 12px 18px; border: 1px solid var(--line); background: transparent; color: var(--silver);
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); transition: color .3s;
+}
+.filters button::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease); }
+.filters button[aria-pressed="true"] { color: #fff; border-color: var(--red); }
+.filters button[aria-pressed="true"]::before { transform: scaleX(1); }
+.stock { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 22px; }
+.car-card { position: relative; background: var(--graphite); border: 1px solid var(--line); transition: opacity .45s var(--ease), transform .6s var(--ease), border-color .4s; }
+.car-card.out { opacity: 0; transform: scale(.95) translateY(12px); }
+.car-card:hover { border-color: rgba(200, 35, 26, .6); }
+.car-card .ph { position: relative; overflow: hidden; aspect-ratio: 4 / 3.4; background: var(--steel); cursor: zoom-in; }
+.car-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--ease); }
+.car-card:hover img { transform: scale(1.07); }
+.car-card .ph::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 40%, rgba(255,255,255,.18) 50%, transparent 60%); transform: translateX(-120%); transition: transform 1s var(--ease); }
+.car-card:hover .ph::after { transform: translateX(120%); }
+.badge { position: absolute; top: 12px; left: 12px; z-index: 1; background: var(--red); color: #fff; font: 700 13px/1 var(--cond); letter-spacing: .14em; text-transform: uppercase; padding: 7px 10px; clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%); }
+.car-card .info { padding: 18px 18px 20px; display: grid; gap: 4px; }
+.car-card .make { font: 700 14px/1 var(--cond); letter-spacing: .16em; text-transform: uppercase; color: var(--silver-2); }
+.car-card h3 { font-size: 24px; line-height: 1.05; }
+.car-card .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.car-card .row span { font: 600 15px/1.3 var(--body); color: var(--silver); }
+.car-card .btn { padding: 12px 16px; font-size: 14px; }
+@media (max-width: 560px) {
+  .stock { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .car-card .info { padding: 12px 12px 14px; }
+  .car-card h3 { font-size: 18px; }
+  .car-card .make { font-size: 12px; }
+  .car-card .row { flex-direction: column; align-items: stretch; gap: 8px; margin-top: 10px; padding-top: 10px; }
+  .car-card .row span { font-size: 13px; }
+  .car-card .btn { justify-content: center; }
+  .badge { font-size: 11px; top: 8px; left: 8px; }
+}
+
+/* Motivos */
+.why { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--line); }
+.why article { padding: 30px 26px 10px 0; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.why article + article { padding-left: 26px; border-left: 1px solid var(--line); }
+.why .ico { width: 54px; height: 54px; display: grid; place-items: center; background: var(--wine); clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%); transition: background-color .4s; }
+.why article:hover .ico { background: var(--red); }
+.why .ico svg { width: 26px; height: 26px; }
+.why h3 { font-size: 21px; line-height: 1.1; }
+.why p { color: var(--silver); }
+@media (max-width: 960px) { .why { grid-template-columns: 1fr 1fr; } .why article:nth-child(3) { padding-left: 0; border-left: 0; } }
+@media (max-width: 560px) { .why { grid-template-columns: 1fr; } .why article, .why article + article { padding: 24px 0; border-left: 0; border-bottom: 1px solid var(--line); } }
+
+/* Entregas */
+.dream { position: relative; overflow: hidden; background: var(--wine); }
+.dream::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(-60deg, transparent 0 30px, rgba(0,0,0,.08) 30px 60px); }
+.dream-grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 6vw, 80px); align-items: center; }
+.dream h2 { font-size: clamp(34px, 5.6vw, 76px); }
+.dream p { color: #f3d5d2; margin-top: 20px; max-width: 30em; }
+.dream .actions { margin-top: 30px; }
+.dream .btn { background: var(--white); color: var(--bg); }
+.dream .btn::after { background: var(--bg); }
+.dream .btn:hover { color: var(--white); }
+.facade { position: relative; clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%); }
+.facade img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.js .facade.reveal { transform: translateX(80px); }
+.js .facade.reveal.in { transform: none; }
+@media (max-width: 860px) { .dream-grid { grid-template-columns: 1fr; } }
+
+/* Visita */
+.visit-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(30px, 6vw, 90px); align-items: end; }
+.visit h2 { font-size: clamp(40px, 6.4vw, 88px); }
+.info { margin: 0; display: grid; }
+.info div { display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 20px 0; border-top: 1px solid var(--line); }
+.info div:last-child { border-bottom: 1px solid var(--line); }
+.info dt { font: 700 14px/1.6 var(--cond); letter-spacing: .14em; text-transform: uppercase; color: var(--red); }
+.info dd { margin: 0; font-size: 18px; }
+.info a { text-decoration: none; border-bottom: 1px solid var(--line); }
+.visit .actions { margin-top: 30px; }
+@media (max-width: 860px) { .visit-grid { grid-template-columns: 1fr; } .info div { grid-template-columns: 1fr; gap: 4px; } }
+
+footer { border-top: 1px solid var(--line); }
+.big { font: 800 clamp(56px, 15vw, 230px)/.85 var(--display); font-stretch: 125%; text-transform: uppercase; text-align: center; white-space: nowrap; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.16); padding-top: 50px; user-select: none; }
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; padding-block: 24px calc(24px + env(safe-area-inset-bottom, 0px)); color: var(--silver-2); font-size: 15px; border-top: 1px solid var(--line); }
+
+/* Foto ampliada */
+.lb { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 20px var(--gr) 20px var(--gl); background: rgba(8,8,9,.93); backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: opacity .45s var(--ease), visibility .45s; }
+.lb.open { opacity: 1; visibility: visible; }
+.lb-box { width: min(920px, 100%); display: grid; grid-template-columns: 1.2fr .8fr; background: var(--graphite); border: 1px solid var(--line); transform: translateY(30px) scale(.97); transition: transform .7s var(--ease); max-height: calc(100svh - 40px); overflow: auto; }
+.lb.open .lb-box { transform: none; }
+.lb-box img { width: 100%; height: 100%; object-fit: cover; min-height: 280px; }
+.lb-text { padding: 28px; display: grid; gap: 14px; align-content: center; position: relative; }
+.lb-text h3 { font-size: 32px; line-height: 1; }
+.lb-text p { color: var(--silver); }
+.lb-close { position: absolute; top: 12px; right: 12px; width: 42px; height: 42px; border: 1px solid var(--line); background: transparent; cursor: pointer; font-size: 22px; line-height: 1; }
+@media (max-width: 700px) { .lb-box { grid-template-columns: 1fr; } .lb-box img { max-height: 46vh; } }
+
+.float { position: fixed; z-index: 40; right: calc(18px + env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: #25d366; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.4); transform: scale(0); transition: transform .6s var(--ease); }
+.float.show { transform: scale(1); }
+.float svg { width: 30px; height: 30px; }
+.float::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid #25d366; animation: ping 2.6s ease-out infinite; }
+@keyframes ping { from { transform: scale(1); opacity: .7; } to { transform: scale(1.7); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+  .js #intro { display: none; }
+  .js .reveal, .js .line > span, .js .fade, .js .slab, .js .car, .js .plate { opacity: 1; transform: none; filter: none; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91A9.85 9.85 0 0 0 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24a8.2 8.2 0 0 1 8.24 8.25c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06a6.7 6.7 0 0 1-3.32-2.9c-.25-.43.25-.4.72-1.33.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.42h-.48a.92.92 0 0 0-.66.31c-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.13.17 1.75 2.67 4.24 3.75 1.58.68 2.2.74 2.99.62.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.1-.22-.16-.47-.29Z"/></symbol>
+</svg>
+
+<div id="intro" aria-hidden="true">
+  <div class="panel p1"></div><div class="panel p2"></div><div class="panel p3"></div>
+  <img src="img/logo.png" data-img="logo" alt="">
+  <div class="road"><i></i></div>
+</div>
+<div id="progress"></div>
+
+<header id="top">
+  <div class="wrap bar">
+    <a class="brand" href="#inicio" aria-label="Jefson Veículos, início">
+      <img src="img/logo.png" data-img="logo" alt="">
+      <span><b>JEFSON</b><small>VEÍCULOS</small></span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a class="link" href="#estoque">Estoque</a>
+      <a class="link" href="#porque">Por que a Jefson</a>
+      <a class="link" href="#entregas">Entregas</a>
+      <a class="link" href="#visite">Localização</a>
+      <a class="btn btn-red wa-link" href="#"><svg aria-hidden="true"><use href="#wa"/></svg>WhatsApp</a>
+    </nav>
+    <button class="burger" type="button" id="burger" aria-label="Abrir menu" aria-expanded="false"><i></i><i></i></button>
+    <div class="menu">
+      <a href="#estoque" style="--i:0"><span>Estoque</span></a>
+      <a href="#porque" style="--i:1"><span>Por que a Jefson</span></a>
+      <a href="#entregas" style="--i:2"><span>Entregas</span></a>
+      <a href="#visite" style="--i:3"><span>Localização</span></a>
+      <p class="small">Av. Nilo Coelho, 35 · Gercino Coelho<br>Petrolina, PE</p>
+    </div>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="speed"></div>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="hash fade">#REALIZANDOSONHOS</span>
+        <h1>
+          <span class="line"><span class="metal">Seminovos</span></span>
+          <span class="line"><span>com <span class="red">procedência</span></span></span>
+          <span class="line"><span class="metal">em Petrolina</span></span>
+        </h1>
+        <p class="lead fade d2">Carros com padrão de qualidade e procedência, prontos para você. Venha conhecer o estoque na Av. Nilo Coelho.</p>
+        <div class="actions fade d3">
+          <a class="btn btn-red wa-link" href="#"><svg aria-hidden="true"><use href="#wa"/></svg>Falar no WhatsApp</a>
+          <a class="btn" href="#estoque">Ver estoque</a>
+        </div>
+      </div>
+      <div class="showcase">
+        <div class="slab"></div>
+        <div class="car"><img src="img/hilux.jpg" data-img="hilux" alt="Toyota Hilux branca na loja Jefson Veículos"></div>
+        <div class="plate"><span>Destaque</span><b>Toyota Hilux</b></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="brands" aria-hidden="true">
+    <div class="brands-track">
+      <span>Toyota</span><span>Hyundai</span><span>Volkswagen</span><span>Jeep</span><span>Honda</span><span>Fiat</span>
+      <span>Toyota</span><span>Hyundai</span><span>Volkswagen</span><span>Jeep</span><span>Honda</span><span>Fiat</span>
+    </div>
+  </div>
+
+  <section class="section" id="estoque">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="tag reveal">Estoque</span>
+          <h2 class="reveal" style="--d:.08s"><span class="metal">Escolha o seu</span><br><span class="red">próximo carro</span></h2>
+          <p class="reveal" style="--d:.16s">Toque no carro para ver de perto e chamar no WhatsApp. O estoque muda sempre, então pergunte também pelo modelo que você procura.</p>
+        </div>
+        <div class="filters reveal" style="--d:.2s" role="group" aria-label="Filtrar por tipo">
+          <button type="button" data-f="all" aria-pressed="true">Todos</button>
+          <button type="button" data-f="suv" aria-pressed="false">SUV</button>
+          <button type="button" data-f="picape" aria-pressed="false">Picape</button>
+          <button type="button" data-f="seda" aria-pressed="false">Sedã</button>
+        </div>
+      </div>
+      <div class="stock" id="stock"></div>
+    </div>
+  </section>
+
+  <section class="section" id="porque" style="padding-top:0">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="tag reveal">Por que a Jefson</span>
+          <h2 class="reveal" style="--d:.08s"><span class="metal">Compra segura,</span><br><span class="red">do começo ao fim</span></h2>
+        </div>
+      </div>
+      <div class="why">
+        <article class="reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></div>
+          <h3>Procedência</h3><p>Seminovos com histórico conhecido, para você comprar com tranquilidade.</p>
+        </article>
+        <article class="reveal" style="--d:.08s">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9L12 3Z"/></svg></div>
+          <h3>Padrão de qualidade</h3><p>Carros selecionados e bem cuidados, prontos para rodar.</p>
+        </article>
+        <article class="reveal" style="--d:.16s">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M3 12h3l3-7 4 14 3-7h5"/></svg></div>
+          <h3>Atendimento direto</h3><p>Fale pelo WhatsApp, tire dúvidas e combine sua visita sem complicação.</p>
+        </article>
+        <article class="reveal" style="--d:.24s">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M3 7h18v10H3z"/><path d="M3 11h18M7 15h3"/></svg></div>
+          <h3>Formas de pagamento</h3><p>Consulte as condições e encontre a melhor forma de levar o seu carro.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dream" id="entregas">
+    <div class="wrap dream-grid">
+      <div>
+        <span class="tag reveal" style="color:#f3d5d2">Entregas</span>
+        <h2 class="reveal" style="--d:.08s;margin-top:16px">Cada entrega,<br>um sonho<br>realizado</h2>
+        <p class="reveal" style="--d:.16s">É isso que o #REALIZANDOSONHOS quer dizer. Veja no nosso Instagram os clientes que já saíram da Jefson de carro novo.</p>
+        <div class="actions reveal" style="--d:.24s"><a class="btn" href="https://www.instagram.com/jefson.veiculos/" target="_blank" rel="noopener">Ver no Instagram</a></div>
+      </div>
+      <div class="facade reveal" style="--d:.12s"><img src="img/loja.jpg" data-img="loja" alt="Fachada da loja Jefson Veículos"></div>
+    </div>
+  </section>
+
+  <section class="section visit" id="visite">
+    <div class="wrap visit-grid">
+      <div>
+        <span class="tag reveal">Localização</span>
+        <h2 class="reveal" style="--d:.08s;margin-top:16px"><span class="metal">Venha</span><br><span class="metal">conhecer</span><br><span class="red">a loja</span></h2>
+        <div class="actions reveal" style="--d:.16s">
+          <a class="btn btn-red wa-link" href="#"><svg aria-hidden="true"><use href="#wa"/></svg>Chamar no WhatsApp</a>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Av.+Nilo+Coelho+35+Gercino+Coelho+Petrolina+PE" target="_blank" rel="noopener">Abrir no mapa</a>
+        </div>
+      </div>
+      <dl class="info reveal" style="--d:.2s">
+        <div><dt>Endereço</dt><dd>Av. Nilo Coelho, 35<br>Gercino Coelho, Petrolina – PE</dd></div>
+        <div><dt>WhatsApp</dt><dd><a class="wa-link" href="#">(87) 98817-8607</a></dd></div>
+        <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/jefson.veiculos/" target="_blank" rel="noopener">@jefson.veiculos</a></dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="big" aria-hidden="true">JEFSON</div>
+  <div class="wrap foot"><span>© <span id="year"></span> Jefson Veículos · Petrolina, PE</span><span>#REALIZANDOSONHOS</span></div>
+</footer>
+
+<a class="float wa-link" id="float" href="#" aria-label="Conversar no WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbTitle" aria-hidden="true">
+  <div class="lb-box">
+    <img id="lbImg" alt="">
+    <div class="lb-text">
+      <button class="lb-close" type="button" id="lbClose" aria-label="Fechar">×</button>
+      <span class="tag" id="lbMake"></span>
+      <h3 id="lbTitle"></h3>
+      <p>Pergunte pelo ano, quilometragem, valor e condições de pagamento.</p>
+      <div><a class="btn btn-red" id="lbWa" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#wa"/></svg>Tenho interesse</a></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const IMAGES = window.__IMAGES || {};
+  const IMG = (n) => IMAGES[n] || (n === "logo" ? "img/logo.png" : `img/${n}.jpg`);
+  const PHONE = "5587988178607";
+  const wa = (m) => `https://wa.me/${PHONE}?text=${encodeURIComponent(m)}`;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  const CARS = [
+    { img: "hilux", make: "Toyota", model: "Hilux", type: "picape", label: "Picape" },
+    { img: "creta", make: "Hyundai", model: "Creta", type: "suv", label: "SUV" },
+    { img: "compass", make: "Jeep", model: "Compass", type: "suv", label: "SUV" },
+    { img: "t-cross", make: "Volkswagen", model: "T-Cross", type: "suv", label: "SUV" },
+    { img: "nivus", make: "Volkswagen", model: "Nivus", type: "suv", label: "SUV" },
+    { img: "tucson", make: "Hyundai", model: "Tucson", type: "suv", label: "SUV" },
+    { img: "hb20s", make: "Hyundai", model: "HB20S", type: "seda", label: "Sedã" },
+    { img: "civic", make: "Honda", model: "Civic", type: "seda", label: "Sedã" },
+  ];
+
+  $$("img[data-img]").forEach((im) => (im.src = IMG(im.dataset.img)));
+  $$(".wa-link").forEach((a) => { a.href = wa("Olá! Vi o site da Jefson Veículos e quero mais informações."); a.target = "_blank"; a.rel = "noopener"; });
+
+  // Abertura
+  const intro = $("#intro");
+  const start = () => document.body.classList.add("ready");
+  if (reduce) { intro.remove(); start(); }
+  else {
+    setTimeout(() => { intro.classList.add("go"); setTimeout(start, 200); }, 1300);
+    setTimeout(() => intro.remove(), 2600);
+  }
+
+  // Revelações
+  const io = "IntersectionObserver" in window ? new IntersectionObserver((es) => es.forEach((e) => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add("in");
+    e.target.querySelectorAll(".reveal").forEach((n) => n.classList.add("in"));
+    io.unobserve(e.target);
+  }), { rootMargin: "0px 0px -8% 0px", threshold: .08 }) : null;
+  const watch = (el) => (io ? io.observe(el) : el.classList.add("in"));
+
+  // Estoque
+  const stock = $("#stock"), lb = $("#lb");
+  CARS.forEach((c, i) => {
+    const el = document.createElement("article");
+    el.className = "car-card reveal";
+    el.dataset.type = c.type;
+    el.style.setProperty("--d", `${(i % 4) * .07}s`);
+    el.innerHTML = `
+      <div class="ph" role="button" tabindex="0" aria-label="Ver ${c.make} ${c.model} de perto"><span class="badge">${c.label}</span><img src="${IMG(c.img)}" alt="${c.make} ${c.model} na loja Jefson Veículos"></div>
+      <div class="info"><span class="make">${c.make}</span><h3>${c.model}</h3>
+        <div class="row"><span>Consulte valores</span><a class="btn btn-red" href="${wa(`Olá! Tenho interesse no ${c.make} ${c.model} que vi no site.`)}" target="_blank" rel="noopener">Quero</a></div>
+      </div>`;
+    const ph = el.querySelector(".ph");
+    ph.addEventListener("click", () => openLb(c));
+    ph.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLb(c); } });
+    stock.appendChild(el);
+    watch(el);
+  });
+  let ft;
+  $$(".filters button").forEach((b) => b.addEventListener("click", () => {
+    $$(".filters button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    const f = b.dataset.f, cards = $$(".car-card", stock);
+    cards.forEach((c) => c.classList.add("out"));
+    clearTimeout(ft);
+    ft = setTimeout(() => {
+      cards.forEach((c) => (c.hidden = f !== "all" && c.dataset.type !== f));
+      requestAnimationFrame(() => requestAnimationFrame(() => cards.filter((c) => !c.hidden).forEach((c, i) => {
+        c.style.transitionDelay = `${i * 50}ms`; c.classList.remove("out"); c.classList.add("in");
+        setTimeout(() => (c.style.transitionDelay = ""), 800);
+      })));
+    }, reduce ? 0 : 300);
+  }));
+
+  // Foto ampliada
+  let lastFocus;
+  function openLb(c) {
+    $("#lbImg").src = IMG(c.img); $("#lbImg").alt = `${c.make} ${c.model}`;
+    $("#lbMake").textContent = `${c.make} · ${c.label}`;
+    $("#lbTitle").textContent = c.model;
+    $("#lbWa").href = wa(`Olá! Tenho interesse no ${c.make} ${c.model} que vi no site.`);
+    lastFocus = document.activeElement;
+    lb.classList.add("open"); lb.setAttribute("aria-hidden", "false"); document.body.classList.add("lock");
+    $("#lbClose").focus();
+  }
+  function closeLb() { lb.classList.remove("open"); lb.setAttribute("aria-hidden", "true"); document.body.classList.remove("lock"); lastFocus?.focus(); }
+  $("#lbClose").addEventListener("click", closeLb);
+  lb.addEventListener("click", (e) => { if (e.target === lb) closeLb(); });
+
+  // Menu
+  const burger = $("#burger");
+  const setMenu = (o) => { document.body.classList.toggle("menu-open", o); document.body.classList.toggle("lock", o); burger.setAttribute("aria-expanded", String(o)); burger.setAttribute("aria-label", o ? "Fechar menu" : "Abrir menu"); };
+  burger.addEventListener("click", () => setMenu(!document.body.classList.contains("menu-open")));
+  $$(".menu a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
+  addEventListener("keydown", (e) => { if (e.key === "Escape") { closeLb(); setMenu(false); } });
+
+  $$(".reveal").forEach((el) => { if (!el.closest(".car-card") && !el.classList.contains("car-card")) watch(el); });
+
+  // Rolagem
+  const header = $("#top"), float = $("#float"), prog = $("#progress");
+  let lastY = 0, tick = false;
+  function onScroll() {
+    if (tick) return; tick = true;
+    requestAnimationFrame(() => {
+      const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+      header.classList.toggle("solid", y > 30);
+      header.classList.toggle("hide", y > lastY && y > 500 && !document.body.classList.contains("menu-open"));
+      float.classList.toggle("show", y > innerHeight * .6);
+      prog.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+      lastY = y; tick = false;
+    });
+  }
+  addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  $("#year").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
