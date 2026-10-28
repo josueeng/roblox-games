@@ -8,6 +8,7 @@ import { Store, LEAD_STATUSES } from './store.js';
 import { WhatsAppClient, verifySignature } from './whatsapp.js';
 import { LeadService, HttpError, windowOpen } from './service.js';
 import { parseCsv, csvRowToLead } from './csv.js';
+import { ProspectService, PROSPECT_STATUSES, DEFAULT_CATEGORIES } from './prospects.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PUBLIC = path.join(ROOT, 'public');
@@ -66,8 +67,9 @@ function leadInput(body) {
   };
 }
 
-export function createApp({ config, store, whatsapp, log = console }) {
+export function createApp({ config, store, whatsapp, log = console, fetchImpl = globalThis.fetch }) {
   const service = new LeadService({ store, whatsapp, config, log });
+  const prospects = new ProspectService({ store, config, fetchImpl });
   const clients = new Set();
 
   store.on('change', (event) => {
@@ -182,6 +184,54 @@ export function createApp({ config, store, whatsapp, log = console }) {
         params: Array.isArray(body.params) ? body.params : [],
       });
       return send(res, 200, { sent: results.filter((r) => r.ok).length, failed: results.filter((r) => !r.ok) });
+    }
+
+    // ---------- Prospecção ----------
+    if (pathname === '/api/prospecting' && method === 'GET') {
+      const st = prospects.settings;
+      return send(res, 200, {
+        city: st.city, message: st.message, senderName: st.senderName, portfolioUrl: st.portfolioUrl,
+        dailyLimit: st.dailyLimit, sentToday: prospects.sentToday(), source: st.googleApiKey ? 'google' : 'osm',
+        categories: DEFAULT_CATEGORIES, statuses: PROSPECT_STATUSES,
+      });
+    }
+    if (pathname === '/api/prospecting/message' && method === 'PUT') {
+      const { message } = parseJson(await readBody(req));
+      if (!message || !String(message).trim()) throw new HttpError(400, 'Mensagem vazia');
+      prospects.setMessage(String(message));
+      return send(res, 200, { ok: true });
+    }
+    if (pathname === '/api/prospects/search' && method === 'POST') {
+      const body = parseJson(await readBody(req));
+      const report = await prospects.search({
+        city: body.city ? String(body.city).trim() : undefined,
+        categories: Array.isArray(body.categories) ? body.categories.map(String) : undefined,
+        onlyWithoutWebsite: body.onlyWithoutWebsite !== false,
+        onlyMobile: body.onlyMobile !== false,
+      });
+      return send(res, 200, report);
+    }
+    if (pathname === '/api/prospects' && method === 'GET') {
+      const list = store.listProspects({ q: url.searchParams.get('q'), status: url.searchParams.get('status') || undefined });
+      return send(res, 200, list.map((p) => prospects.view(p)));
+    }
+    const pm = pathname.match(/^\/api\/prospects\/([\w-]+)(\/contacted|\/convert)?$/);
+    if (pm) {
+      const prospect = store.getProspect(pm[1]);
+      if (!prospect) throw new HttpError(404, 'Empresa não encontrada');
+      if (pm[2] === '/contacted' && method === 'POST') return send(res, 200, prospects.view(prospects.markContacted(prospect)));
+      if (pm[2] === '/convert' && method === 'POST') return send(res, 201, leadView(prospects.convert(prospect)));
+      if (!pm[2] && method === 'DELETE') { store.deleteProspect(prospect.id); return send(res, 204, ''); }
+      if (!pm[2] && method === 'PATCH') {
+        const body = parseJson(await readBody(req));
+        const patch = {};
+        if (body.status !== undefined) {
+          if (!PROSPECT_STATUSES.includes(body.status)) throw new HttpError(400, 'Status inválido');
+          patch.status = body.status;
+        }
+        if (typeof body.notes === 'string') patch.notes = body.notes;
+        return send(res, 200, prospects.view(store.updateProspect(prospect.id, patch)));
+      }
     }
 
     const m = pathname.match(/^\/api\/leads\/([\w-]+)(\/messages|\/read)?$/);

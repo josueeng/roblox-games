@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { DEFAULT_MESSAGE } from './prospects.js';
 
 /** Lê um arquivo .env simples (CHAVE=valor) sem sobrescrever variáveis já definidas. */
 export function loadEnvFile(file) {
@@ -57,5 +58,13 @@ export function buildConfig(env = process.env) {
     optOutKeywords: list(env.OPT_OUT_KEYWORDS || 'sair,parar,pare,stop,cancelar,descadastrar').map((k) => k.toLowerCase()),
     optOutReply: env.OPT_OUT_REPLY ?? 'Tudo certo! Você não receberá mais mensagens automáticas nossas.',
     sendIntervalMs: int(env.SEND_INTERVAL_MS, 1200),
+    prospecting: {
+      city: env.PROSPECT_CITY || 'Petrolina, PE',
+      googleApiKey: env.GOOGLE_PLACES_API_KEY || '',
+      senderName: env.PROSPECT_SENDER_NAME || '',
+      portfolioUrl: env.PROSPECT_PORTFOLIO_URL || '',
+      dailyLimit: int(env.PROSPECT_DAILY_LIMIT, 25),
+      message: (env.PROSPECT_MESSAGE || '').replace(/\\n/g, '\n') || DEFAULT_MESSAGE,
+    },
   };
 }

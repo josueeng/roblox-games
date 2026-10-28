@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prospecção</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/prospeccao.css">
+</head>
+<body class="prospect-page">
+  <header class="topbar">
+    <a href="/" class="brand back">← WhatsApp Leads</a>
+    <div class="brand">🔎 Prospecção</div>
+    <div id="counter" class="mode live"></div>
+  </header>
+
+  <main class="pp">
+    <section class="card next-card">
+      <h2>Próximo contato</h2>
+      <div id="next"></div>
+    </section>
+
+    <section class="card">
+      <h2>Buscar empresas</h2>
+      <form id="form-search">
+        <label>Cidade <input name="city"></label>
+        <div id="categories-box">
+          <p class="hint">Ramos de negócio <button type="button" class="link" id="toggle-cats">marcar/desmarcar todos</button></p>
+          <div id="categories" class="chips"></div>
+        </div>
+        <p id="source-hint" class="hint"></p>
+        <label class="check"><input type="checkbox" name="onlyWithoutWebsite" checked> <span>Só empresas <strong>sem site</strong> (Instagram/Facebook contam como sem site)</span></label>
+        <label class="check"><input type="checkbox" name="onlyMobile" checked> Só números de celular (que têm WhatsApp)</label>
+        <button>Buscar</button>
+        <p class="result" id="search-result"></p>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Mensagem padrão</h2>
+      <p class="hint">Variáveis: <code>{empresa}</code> <code>{meu_nome}</code> <code>{cidade}</code> <code>{categoria}</code> <code>{portfolio}</code>. Use *texto* para negrito no WhatsApp.</p>
+      <form id="form-message">
+        <textarea name="message" rows="10"></textarea>
+        <button>Salvar mensagem</button>
+        <span class="result" id="message-result"></span>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Empresas encontradas</h2>
+      <div class="list-filters">
+        <input id="q" type="search" placeholder="Buscar…">
+        <select id="status"></select>
+      </div>
+      <ul id="list" class="plist"></ul>
+    </section>
+  </main>
+
+  <script src="/prospeccao.js" type="module"></script>
+</body>
+</html>

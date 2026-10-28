@@ -8,6 +8,7 @@ Painel para **monitorar leads e conversar com eles pelo seu WhatsApp**, usando a
 - 📊 **Indicadores**: novos, não lidas, aguardando resposta, convertidos, enviadas/lidas/falhas nas últimas 24h.
 - ✓✓ **Status de entrega**: enviado, entregue, lido ou falhou, para cada mensagem.
 - 🤖 **Automação**: modelo de boas-vindas para novos leads e follow-up automático para quem não respondeu (com limite e horário comercial).
+- 🔎 **Prospecção**: encontra empresas sem site na sua cidade e prepara a abordagem pelo WhatsApp do seu celular.
 - 📣 **Envio em massa** de modelos aprovados, filtrando por status e tag.
 - 🛡️ **Respeita as regras do WhatsApp**: janela de 24h, opt-in obrigatório para modelos e descadastro automático quando o lead manda "SAIR".
 
@@ -59,6 +60,27 @@ Quem chama seu número primeiro conta como opt-in. Leads importados ou vindos de
 precisam ter o consentimento marcado (coluna `optin` = `sim` no CSV, ou `consentimento=on` no formulário).
 Enviar para quem não autorizou gera denúncias, derruba a qualidade do número e pode levar ao bloqueio.
 
+## Prospecção: encontrar empresas e abordar pelo seu celular
+
+Em **🔎 Prospecção** (`/prospeccao.html`) o app:
+
+1. **Busca empresas da cidade** (padrão: Petrolina, PE) em vários ramos: restaurantes, clínicas, salões, academias, lojas, oficinas…
+   - Com `GOOGLE_PLACES_API_KEY` usa o **Google Maps**: muitos resultados. A Google dá crédito mensal grátis, suficiente para algumas centenas de buscas.
+   - Sem a chave usa o **OpenStreetMap**: grátis, mas com poucas empresas cadastradas.
+2. **Filtra** e mantém só empresas **sem site** (bons clientes para quem vende sites), com **celular** e que ainda não estão cadastradas.
+3. Monta a **mensagem padrão** personalizada com o nome de cada empresa: sites e sistemas web a partir de R$ 250. Dá para editar o texto na própria tela.
+4. Mostra uma **fila**. Abra o painel **no navegador do celular** e toque em **"Abrir no WhatsApp e enviar"**: o WhatsApp abre com a mensagem pronta e você só toca em enviar. Depois volte e siga para a próxima. São uns 3 toques por empresa.
+5. Controla o **limite diário** (`PROSPECT_DAILY_LIMIT`, padrão 25) e o andamento de cada empresa (enviado, respondeu, interessado, sem interesse, número inválido). Quem se interessar vira lead com **"Virou lead"**.
+
+**Por que o último toque é seu:** o WhatsApp bane números que mandam mensagens automáticas em massa para quem nunca falou com você. A API oficial também proíbe esse envio. Mandar uma por uma pelo próprio aparelho, em pequeno volume e com texto personalizado, é o que mantém seu número ativo.
+
+Dicas para não ser bloqueado:
+- Comece com 10 a 20 contatos por dia e aumente aos poucos.
+- Responda rápido a quem responder e respeite quem pedir para não ser contatado (marque como "Sem interesse").
+- Muitas denúncias de "spam" derrubam o número. Mensagem curta, educada e com saída fácil reduz isso.
+
+Para usar no celular, o app precisa estar publicado na internet (veja *Conectar ao seu WhatsApp*, passo 5) ou na mesma rede Wi-Fi do computador (`http://IP-DO-COMPUTADOR:3000`).
+
 ## Captura de leads dos sites
 
 Defina `INTAKE_TOKEN` no `.env` e aponte o formulário do site para `/api/intake`:
@@ -97,6 +119,12 @@ Todas as rotas `/api/*` (menos `/api/intake`) exigem o usuário e a senha do pai
 | POST | `/api/leads/import` | Corpo = CSV |
 | POST | `/api/broadcast` | `{ "leadIds": [...], "template": "…", "params": ["{primeiro_nome}"] }` |
 | GET | `/api/stats` | Indicadores |
+| GET | `/api/prospecting` | Configuração da prospecção e contador do dia |
+| PUT | `/api/prospecting/message` | `{ "message": "…" }` salva a mensagem padrão |
+| POST | `/api/prospects/search` | `{ "city": "Petrolina, PE", "categories": [...], "onlyWithoutWebsite": true, "onlyMobile": true }` |
+| GET | `/api/prospects?q=&status=` | Empresas encontradas (com link do WhatsApp) |
+| PATCH/DELETE | `/api/prospects/:id` | Muda status / remove |
+| POST | `/api/prospects/:id/contacted` · `/convert` | Marca como contatado / transforma em lead |
 | GET | `/api/events` | Eventos em tempo real (SSE) |
 
 ## Testes

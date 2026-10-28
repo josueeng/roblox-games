@@ -15,9 +15,9 @@ export class Store extends EventEmitter {
   constructor(file) {
     super();
     this.file = file;
-    this.data = { leads: [], messages: [] };
+    this.data = { leads: [], messages: [], prospects: [], settings: {} };
     if (file && fs.existsSync(file)) {
-      this.data = { leads: [], messages: [], ...JSON.parse(fs.readFileSync(file, 'utf8')) };
+      this.data = { ...this.data, ...JSON.parse(fs.readFileSync(file, 'utf8')) };
     }
     this._timer = null;
   }
@@ -149,6 +149,46 @@ export class Store extends EventEmitter {
     if (msg.status === 'failed') return msg;
     if ((STATUS_RANK[status] ?? -1) <= (STATUS_RANK[msg.status] ?? -1)) return msg;
     return this.updateMessage(msg.id, { status });
+  }
+
+  // ---------- Prospects (empresas encontradas na busca) ----------
+  listProspects({ q, status } = {}) {
+    const term = (q || '').toLowerCase().trim();
+    return this.data.prospects
+      .filter((p) => !status || p.status === status)
+      .filter((p) => !term || [p.name, p.phone, p.category, p.address].some((v) => String(v || '').toLowerCase().includes(term)));
+  }
+
+  getProspect(prospectId) {
+    return this.data.prospects.find((p) => p.id === prospectId) || null;
+  }
+
+  findProspectByPhone(phone) {
+    const key = phoneKey(phone);
+    return this.data.prospects.find((p) => phoneKey(p.phone) === key) || null;
+  }
+
+  addProspect(fields) {
+    const prospect = { id: id(), status: 'novo', notes: '', contactedAt: null, leadId: null, createdAt: now(), ...fields };
+    this.data.prospects.push(prospect);
+    this.changed('prospect', { prospect });
+    return prospect;
+  }
+
+  updateProspect(prospectId, patch) {
+    const prospect = this.getProspect(prospectId);
+    if (!prospect) return null;
+    Object.assign(prospect, patch, { updatedAt: now() });
+    this.changed('prospect', { prospect });
+    return prospect;
+  }
+
+  deleteProspect(prospectId) {
+    const before = this.data.prospects.length;
+    this.data.prospects = this.data.prospects.filter((p) => p.id !== prospectId);
+    if (this.data.prospects.length === before) return false;
+    this.changed('prospect_deleted', { prospectId });
+    return true;
   }
 
   stats(at = Date.now()) {
