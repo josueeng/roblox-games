@@ -1,0 +1,14 @@
+{
+  "name": "whatsapp-leads",
+  "version": "1.0.0",
+  "description": "Monitora leads e envia mensagens pelo WhatsApp (API oficial WhatsApp Cloud)",
+  "type": "module",
+  "private": true,
+  "main": "src/server.js",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test test/*.test.js"
+  }
+}

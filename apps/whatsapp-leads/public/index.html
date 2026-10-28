@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WhatsApp Leads</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">💬</span> WhatsApp Leads</div>
+    <div id="mode" class="mode"></div>
+    <div class="actions">
+      <button id="btn-new">+ Novo lead</button>
+      <button id="btn-import" class="ghost">Importar CSV</button>
+      <button id="btn-broadcast" class="ghost">Envio em massa</button>
+    </div>
+  </header>
+
+  <section id="stats" class="stats"></section>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="filters">
+        <input id="search" type="search" placeholder="Buscar nome, telefone, tag…">
+        <select id="filter-status"><option value="">Todos os status</option></select>
+      </div>
+      <ul id="lead-list" class="lead-list"></ul>
+    </aside>
+
+    <section id="detail" class="detail">
+      <div class="empty">Selecione um lead para ver a conversa.</div>
+    </section>
+  </main>
+
+  <dialog id="dlg-new">
+    <form method="dialog" id="form-new">
+      <h2>Novo lead</h2>
+      <label>Nome <input name="name" autocomplete="off"></label>
+      <label>WhatsApp * <input name="phone" required placeholder="(11) 98765-4321"></label>
+      <label>E-mail <input name="email" type="email"></label>
+      <label>Origem <input name="source" placeholder="site, instagram, indicação…"></label>
+      <label>Tags <input name="tags" placeholder="separadas por vírgula"></label>
+      <label class="check"><input type="checkbox" name="optIn"> O lead autorizou receber mensagens no WhatsApp</label>
+      <p class="error" data-error></p>
+      <menu><button value="cancel" formnovalidate class="ghost">Cancelar</button><button value="ok">Salvar</button></menu>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-import">
+    <form method="dialog" id="form-import">
+      <h2>Importar leads (CSV)</h2>
+      <p class="hint">Colunas aceitas: <code>nome, telefone, email, origem, tags, optin</code>. Separador vírgula ou ponto e vírgula. Em <code>optin</code> use <code>sim</code> para quem autorizou contato.</p>
+      <input type="file" name="file" accept=".csv,text/csv" required>
+      <p class="result" data-result></p>
+      <menu><button value="cancel" formnovalidate class="ghost">Fechar</button><button value="ok">Importar</button></menu>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-broadcast">
+    <form method="dialog" id="form-broadcast">
+      <h2>Envio em massa</h2>
+      <p class="hint">Envia um <strong>modelo aprovado</strong> na Meta para os leads filtrados que têm opt-in. Variáveis aceitas nos parâmetros: <code>{nome}</code>, <code>{primeiro_nome}</code>, <code>{telefone}</code>, <code>{origem}</code>.</p>
+      <label>Status dos leads <select name="status"></select></label>
+      <label>Tag (opcional) <input name="tag"></label>
+      <label>Modelo * <input name="template" required placeholder="ex.: oferta_semana"></label>
+      <label>Idioma <input name="language" value="pt_BR"></label>
+      <label>Parâmetros (separados por |) <input name="params" placeholder="{primeiro_nome}|20%"></label>
+      <p class="hint" data-count></p>
+      <p class="result" data-result></p>
+      <menu><button value="cancel" formnovalidate class="ghost">Fechar</button><button value="ok">Enviar</button></menu>
+    </form>
+  </dialog>
+
+  <template id="tpl-detail">
+    <div class="conv">
+      <div class="conv-head">
+        <div>
+          <h2 data-name></h2>
+          <a data-phone target="_blank" rel="noopener"></a>
+        </div>
+        <span class="window" data-window></span>
+      </div>
+      <div class="messages" data-messages></div>
+      <form class="composer" data-composer>
+        <div class="tabs">
+          <button type="button" data-tab="text" class="tab">Texto</button>
+          <button type="button" data-tab="template" class="tab">Modelo</button>
+        </div>
+        <div data-pane="text">
+          <textarea name="text" rows="2" placeholder="Escreva uma mensagem… (Enter envia, Shift+Enter quebra linha)"></textarea>
+        </div>
+        <div data-pane="template" class="tpl-fields">
+          <input name="template" placeholder="nome do modelo">
+          <input name="language" value="pt_BR" class="small">
+          <input name="params" placeholder="parâmetros: {primeiro_nome}|…">
+        </div>
+        <button>Enviar</button>
+        <p class="error" data-error></p>
+      </form>
+    </div>
+    <div class="info">
+      <h3>Dados do lead</h3>
+      <label>Nome <input data-field="name"></label>
+      <label>E-mail <input data-field="email"></label>
+      <label>Origem <input data-field="source"></label>
+      <label>Status <select data-field="status"></select></label>
+      <label>Tags <input data-field="tags"></label>
+      <label>Anotações <textarea data-field="notes" rows="4"></textarea></label>
+      <label class="check"><input type="checkbox" data-field="optIn"> Autorizou receber mensagens</label>
+      <label class="check"><input type="checkbox" data-field="optedOut"> Pediu para sair (bloqueia envios)</label>
+      <dl class="meta" data-meta></dl>
+      <button class="danger ghost" data-delete>Excluir lead</button>
+    </div>
+  </template>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
